@@ -1,0 +1,8 @@
+[grpc]
+address = "0.0.0.0:18000"
+
+[grpc.services.storageprovider]
+driver = "s3"
+
+[http]
+address = "0.0.0.0:18001"
