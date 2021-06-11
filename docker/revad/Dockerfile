@@ -15,6 +15,7 @@ RUN git clone https://github.com/ylebre/reva
 WORKDIR /go/src/github/cs3org/reva
 RUN git checkout static-build
 
+ADD revad-storage-nextcloud /go/src/github/cs3org/reva/pkg/storage/fs/nextcloud
 RUN make build-revad-docker && \
     cp /go/src/github/cs3org/reva/cmd/revad/revad /go/bin/revad
 
@@ -30,6 +31,8 @@ EXPOSE 9999 10000
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/bin/revad /usr/bin/revad
 COPY --from=builder /etc/revad /etc/revad
+
+ADD config.toml /etc/revad/config.toml
 
 ENTRYPOINT [ "/usr/bin/revad" ]
 CMD [ "-c", "/etc/revad/revad.toml", "-p", "/var/run/revad.pid" ]
