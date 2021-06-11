@@ -13,4 +13,5 @@ RUN apt-get update && apt-get install -yq \
   vim
 WORKDIR /var/www/html
 ADD init.sh /
+ADD nc-sciencemesh /var/www/html/apps/nc-sciencemesh
 EXPOSE 443
