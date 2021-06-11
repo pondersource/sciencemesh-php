@@ -15,7 +15,7 @@ RUN git clone https://github.com/ylebre/reva
 WORKDIR /go/src/github/cs3org/reva
 RUN git checkout static-build
 
-ADD revad-storage-nextcloud /go/src/github/cs3org/reva/pkg/storage/fs/nextcloud
+ADD reva-storage-nextcloud /go/src/github/cs3org/reva/pkg/storage/fs/nextcloud
 RUN make build-revad-docker && \
     cp /go/src/github/cs3org/reva/cmd/revad/revad /go/bin/revad
 

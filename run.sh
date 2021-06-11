@@ -13,6 +13,12 @@ done
 docker logs nc
 echo Running init script for Nextcloud...
 docker exec -u www-data -it -e SERVER_ROOT=https://nc nc sh /init.sh
-docker exec -u root -it $1 service apache2 reload
+docker exec -u root -it nc service apache2 reload
 
 docker run -d --name revad --network=testnet revad
+
+# docker run --network=host -d nc --name nc_live
+# docker exec -u www-data -it -e SERVER_ROOT=http://dockerbak nc_live sh /init.sh
+# docker exec -u root -it nc_live service apache2 reload
+# docker exec -it nc_live vim config/config.php +24
+
