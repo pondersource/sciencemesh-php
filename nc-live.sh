@@ -10,5 +10,5 @@ until curl -I http://dockerbak 2> /dev/null > /dev/null
     sleep 1
   done
 docker exec -u www-data -it -e SERVER_ROOT=http://dockerbak nc_live sh /init.sh
-docker exec -u root -it nc_live service apache2 reload
 docker exec -u www-data -it nc_live sed -i '25 a\ \ \ \ 1 => "dockerbak",' config/config.php
+docker exec -u root -it nc_live service apache2 reload
