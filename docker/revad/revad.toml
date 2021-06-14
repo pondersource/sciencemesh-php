@@ -8,5 +8,12 @@ mount_id = "123e4567-e89b-12d3-a456-426655440000"
 expose_data_server = true
 data_server_url = "http://nexcloud/data"
 
+[grpc.services.storageprovider.drivers.nextcloud]
+"s3.endpoint" = "http://nextcloud/"
+"s3.region" = "default"
+"s3.bucket" = "the-bucket"
+"s3.access_key" = "foo"
+"s3.secret_key" = "bar"
+
 [http]
 address = "0.0.0.0:18001"
