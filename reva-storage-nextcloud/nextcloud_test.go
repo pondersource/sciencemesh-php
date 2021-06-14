@@ -16,19 +16,19 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
-package s3ng_test
+package nextcloud_test
 
 import (
 	"os"
 
-	"github.com/cs3org/reva/pkg/storage/fs/s3ng"
+	"github.com/cs3org/reva/pkg/storage/fs/nextcloud"
 	"github.com/cs3org/reva/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("S3ng", func() {
+var _ = Describe("Nextcloud", func() {
 	var (
 		options map[string]interface{}
 		tmpRoot string
@@ -58,12 +58,12 @@ var _ = Describe("S3ng", func() {
 
 	Describe("New", func() {
 		It("fails on missing s3 configuration", func() {
-			_, err := s3ng.New(map[string]interface{}{})
+			_, err := nextcloud.New(map[string]interface{}{})
 			Expect(err).To(MatchError("S3 configuration incomplete"))
 		})
 
 		It("works with complete configuration", func() {
-			_, err := s3ng.New(options)
+			_, err := nextcloud.New(options)
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})

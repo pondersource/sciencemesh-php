@@ -16,7 +16,7 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
-package s3ng
+package nextcloud
 
 import (
 	"github.com/mitchellh/mapstructure"
