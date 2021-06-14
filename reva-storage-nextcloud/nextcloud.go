@@ -19,7 +19,7 @@
 package nextcloud
 
 import (
-	// "fmt"
+	"fmt"
 
 	"github.com/cs3org/reva/pkg/storage"
 	"github.com/cs3org/reva/pkg/storage/fs/registry"
@@ -39,7 +39,7 @@ func New(m map[string]interface{}) (storage.FS, error) {
 		return nil, err
 	}
 
-	If !o.S3ConfigComplete() {
+	if !o.S3ConfigComplete() {
 		return nil, fmt.Errorf("S3 configuration incomplete")
 	}
 
