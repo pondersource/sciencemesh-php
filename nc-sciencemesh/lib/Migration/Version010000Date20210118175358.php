@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OCA\ScienceMesh\Migration;
 
+require_once(__DIR__ . "/../../vendor/autoload.php");
+
 use Closure;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
