@@ -32,7 +32,7 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/bin/revad /usr/bin/revad
 COPY --from=builder /etc/revad /etc/revad
 
-ADD config.toml /etc/revad/config.toml
+ADD revad.toml /etc/revad/revad.toml
 
 ENTRYPOINT [ "/usr/bin/revad" ]
 CMD [ "-c", "/etc/revad/revad.toml", "-p", "/var/run/revad.pid" ]
