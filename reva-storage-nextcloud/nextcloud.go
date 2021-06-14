@@ -39,9 +39,9 @@ func New(m map[string]interface{}) (storage.FS, error) {
 		return nil, err
 	}
 
-	// If !o.S3ConfigComplete() {
-	// 	return nil, fmt.Errorf("S3 configuration incomplete")
-	// }
+	If !o.S3ConfigComplete() {
+		return nil, fmt.Errorf("S3 configuration incomplete")
+	}
 
 	bs, err := blobstore.New(o.S3Endpoint, o.S3Region, o.S3Bucket, o.S3AccessKey, o.S3SecretKey)
 	if err != nil {
