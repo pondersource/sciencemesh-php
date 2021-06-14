@@ -15,6 +15,13 @@ RUN git clone https://github.com/ylebre/reva
 WORKDIR /go/src/github/cs3org/reva
 RUN git checkout static-build
 
+# FIXME: find a way to only download dependencies at this point
+# That would speed up rebuilds when editing the contents of reva-storage-nextcloud
+#RUN go get ./...
+#RUN go get ./cmd/revad/...
+RUN make build-revad-docker
+#
+
 ADD reva-storage-nextcloud /go/src/github/cs3org/reva/pkg/storage/fs/nextcloud
 RUN sed -i '29 a\ \ \ \ \ \ _ "github.com/cs3org/reva/pkg/storage/fs/nextcloud"' pkg/storage/fs/loader/loader.go
 RUN make build-revad-docker && \

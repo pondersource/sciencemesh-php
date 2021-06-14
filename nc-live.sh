@@ -11,7 +11,4 @@ until curl -I http://dockerbak 2> /dev/null > /dev/null
   done
 docker exec -u www-data -it -e SERVER_ROOT=http://dockerbak nc_live sh /init.sh
 docker exec -u root -it nc_live service apache2 reload
-echo vim config/config.php +24
-docker exec -u www-data -it nc_live /bin/bash
-
-e
+docker exec -u www-data -it nc_live sed -i '25 a\ \ \ \ 1 => "dockerbak",' config/config.php
