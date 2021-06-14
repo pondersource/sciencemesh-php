@@ -18,8 +18,6 @@ export DOCKERHOST=ssh://root@dockerbak
 ./build.sh
 ./reset.sh
 ./nc-live.sh
-$ vim config/config.php +24
-$ exit
 docker logs nc_live
 ./revad-live.sh
 docker logs revad_live
