@@ -16,7 +16,7 @@ WORKDIR /go/src/github/cs3org/reva
 RUN git checkout static-build
 
 ADD reva-storage-nextcloud /go/src/github/cs3org/reva/pkg/storage/fs/nextcloud
-RUN sed '29 a _ "github.com/cs3org/reva/pkg/storage/fs/nextcloud"' pkg/storage/fs/loader/loader.go
+RUN sed -i '29 a\ \ \ \ \ \ _ "github.com/cs3org/reva/pkg/storage/fs/nextcloud"' pkg/storage/fs/loader/loader.go
 RUN make build-revad-docker && \
     cp /go/src/github/cs3org/reva/cmd/revad/revad /go/bin/revad
 
