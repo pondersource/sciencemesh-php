@@ -9,6 +9,7 @@
     <namespace>ScienceMesh</namespace>
     <category>productivity</category>
     <dependencies>
+        <nextcloud min-version="21" max-version="21" />
         <owncloud min-version="9.0"/>
         <owncloud max-version="11.0"/>
     </dependencies>
