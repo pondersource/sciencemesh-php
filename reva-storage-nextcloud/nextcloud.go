@@ -19,8 +19,12 @@
 package nextcloud
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"io"
+	"net/http"
 	"net/url"
 
 	provider "github.com/cs3org/go-cs3apis/cs3/storage/provider/v1beta1"
@@ -67,14 +71,30 @@ func New(m map[string]interface{}) (storage.FS, error) {
 	return nextcloud, nil
 }
 
+type Action struct {
+	verb string
+	argS string
+}
+
+func (nc *nextcloud) do(a Action) (string, error) {
+	b, err := json.Marshal(a)
+	fmt.Println("action %s\n", b)
+	resp, err := http.Post(nc.endPoint, "application/json", bytes.NewReader(b))
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	return string(body), err
+}
+
 func (nc *nextcloud) GetHome(ctx context.Context) (string, error) {
-	return "sorry", gstatus.Errorf(codes.Unimplemented, "method not implemented")
+	return nc.do(Action{"GetHome", ""})
 }
 func (nc *nextcloud) CreateHome(ctx context.Context) error {
-	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+	_, err := nc.do(Action{"CreateHome", ""})
+	return err
 }
 func (nc *nextcloud) CreateDir(ctx context.Context, fn string) error {
-	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+	_, err := nc.do(Action{"CreateDir", fn})
+	return err
 }
 func (nc *nextcloud) Delete(ctx context.Context, ref *provider.Reference) error {
 	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
