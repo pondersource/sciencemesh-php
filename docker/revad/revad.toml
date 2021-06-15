@@ -9,11 +9,7 @@ expose_data_server = true
 data_server_url = "http://nexcloud/data"
 
 [grpc.services.storageprovider.drivers.nextcloud]
-"s3.endpoint" = "http://nextcloud/"
-"s3.region" = "default"
-"s3.bucket" = "the-bucket"
-"s3.access_key" = "foo"
-"s3.secret_key" = "bar"
+end_point = "http://nextcloud/app/sciencemesh/do.php"
 
 [http]
 address = "0.0.0.0:18001"
