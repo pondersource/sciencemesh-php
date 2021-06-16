@@ -29,10 +29,15 @@ RUN make build-revad-docker && \
 
 RUN mkdir -p /etc/revad/ && echo "" > /etc/revad/revad.toml
 
-FROM ubuntu
-RUN apt-get update && apt-get install -yq\
-  git \
-  vim
+# FROM ubuntu
+# RUN apt-get update && apt-get install -yq\
+#   git \
+#   vim
+
+FROM golang:alpine
+
+RUN apk --no-cache add \
+  mailcap
 
 EXPOSE 9999 10000
 
