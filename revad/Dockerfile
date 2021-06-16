@@ -43,6 +43,7 @@ COPY --from=builder /etc/revad /etc/revad
 ADD revad.toml /etc/revad/revad.toml
 ADD users.json /etc/revad/users.json
 ADD providers.json /etc/revad/providers.json
+RUN mkdir -p /var/tmp/reva
 
 ENTRYPOINT [ "/usr/bin/revad" ]
 CMD [ "-c", "/etc/revad/revad.toml", "-p", "/var/run/revad.pid" ]
