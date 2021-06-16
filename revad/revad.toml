@@ -60,7 +60,7 @@ file = "/var/tmp/reva/shares_server_1.json"
 driver = "json"
 
 [grpc.services.ocmproviderauthorizer.drivers.json]
-providers = "providers.demo.json"
+providers = "providers.json"
 
 [grpc.services.publicshareprovider]
 driver = "memory"
@@ -100,13 +100,13 @@ user_layout = "{{.Username}}"
 auth_manager = "json"
 
 [grpc.services.authprovider.auth_managers.json]
-users = "users.demo.json"
+users = "users.json"
 
 [grpc.services.userprovider]
 driver = "json"
 
 [grpc.services.userprovider.drivers.json]
-users = "users.demo.json"
+users = "users.json"
 
 [http]
 enabled_services = ["ocmd"]
@@ -129,7 +129,7 @@ prefix = "ocm"
 driver = "json"
 
 [http.middlewares.providerauthorizer.drivers.json]
-providers = "providers.demo.json"
+providers = "providers.json"
 
 [http.services.ocs]
 prefix = "ocs"
