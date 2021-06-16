@@ -20,8 +20,13 @@ export DOCKERHOST=ssh://root@dockerbak
 ./nc-live.sh
 docker logs nc_live
 ./revad-live.sh
-docker logs revad_live
 ```
 
 * Visit http://dockerbak/ and log in as `alice` / `alice123`
 * Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:18000`
+```sh
+$ login basic
+username: einstein
+password: relativity
+$ ls /home
+```

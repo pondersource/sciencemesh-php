@@ -1,6 +1,9 @@
 [grpc]
 address = "0.0.0.0:18000"
 
+
+[grpc.services.gateway]
+[grpc.services.storageregistry]
 [grpc.services.storageprovider]
 driver = "nextcloud"
 mount_path = "/nc"
@@ -13,3 +16,7 @@ end_point = "http://nextcloud/app/sciencemesh/do.php"
 
 [http]
 address = "0.0.0.0:18001"
+
+[grpc.services.authprovider]
+[grpc.services.authregistry]
+[grpc.services.userprovider]
