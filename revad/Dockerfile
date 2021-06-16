@@ -11,9 +11,9 @@ ENV PATH /go/bin:/usr/local/go/bin:$PATH
 ENV GOPATH /go
 
 WORKDIR /go/src/github/cs3org
-RUN git clone https://github.com/ylebre/reva
+RUN git clone https://github.com/SamuAlfageme/reva
 WORKDIR /go/src/github/cs3org/reva
-RUN git checkout static-build
+RUN git checkout docker_fix_base_cgo
 
 # FIXME: find a way to only download dependencies at this point
 # That would speed up rebuilds when editing the contents of reva-storage-nextcloud
