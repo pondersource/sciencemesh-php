@@ -98,6 +98,7 @@ user_layout = "{{.Username}}"
 
 [grpc.services.storageprovider.drivers.nextcloud]
 end_point = "http://nextcloud/app/sciencemesh/do.php"
+user_layout = "{{.Username}}"
 
 [grpc.services.authprovider]
 auth_manager = "json"
