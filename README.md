@@ -23,7 +23,7 @@ docker logs nc_live
 ```
 
 * Visit http://dockerbak/ and log in as `alice` / `alice123`
-* Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:18000`
+* Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:19000`
 ```sh
 $ login basic
 username: einstein
