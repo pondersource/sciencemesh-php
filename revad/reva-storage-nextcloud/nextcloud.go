@@ -19,25 +19,36 @@
 package nextcloud
 
 import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+
+	provider "github.com/cs3org/go-cs3apis/cs3/storage/provider/v1beta1"
 	"github.com/cs3org/reva/pkg/storage"
 	"github.com/cs3org/reva/pkg/storage/fs/registry"
-	"github.com/cs3org/reva/pkg/storage/utils/localfs"
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
+	codes "google.golang.org/grpc/codes"
+	gstatus "google.golang.org/grpc/status"
 )
 
 func init() {
 	registry.Register("nextcloud", New)
 }
 
-type config struct {
-	Root        string `mapstructure:"root" docs:"/var/tmp/reva/;Path of root directory for user storage."`
-	ShareFolder string `mapstructure:"share_folder" docs:"/MyShares;Path for storing share references."`
-	UserLayout  string `mapstructure:"user_layout" docs:"{{.Username}};Template for user home directories"`
+type Config struct {
+	EndPoint string `mapstructure:"end_point"` // e.g. "http://nextcloud/app/sciencemesh/do.php"
+}
+type nextcloud struct {
+	endPoint string
 }
 
-func parseConfig(m map[string]interface{}) (*config, error) {
-	c := &config{}
+func parseConfig(m map[string]interface{}) (*Config, error) {
+	c := &Config{}
 	if err := mapstructure.Decode(m, c); err != nil {
 		err = errors.Wrap(err, "error decoding conf")
 		return nil, err
@@ -48,15 +59,114 @@ func parseConfig(m map[string]interface{}) (*config, error) {
 // New returns an implementation to of the storage.FS interface that talks to
 // a Nextcloud instance over http.
 func New(m map[string]interface{}) (storage.FS, error) {
-	c, err := parseConfig(m)
+	conf, err := parseConfig(m)
 	if err != nil {
 		return nil, err
 	}
 
-	conf := localfs.Config{
-		Root:        c.Root,
-		ShareFolder: c.ShareFolder,
-		UserLayout:  c.UserLayout,
-	}
-	return localfs.NewLocalFS(&conf)
+	return NewNextcloud(conf)
+}
+
+func NewNextcloud(c *Config) (storage.FS, error) {
+	return &nextcloud{
+		endPoint: c.EndPoint, // e.g. "http://nextcloud/app/sciencemesh/do.php"
+	}, nil
+}
+
+type Action struct {
+	verb string
+	argS string
+}
+
+func (nc *nextcloud) do(a Action) (string, error) {
+	b, err := json.Marshal(a)
+	fmt.Println("action %s\n", b)
+	resp, err := http.Post(nc.endPoint, "application/json", bytes.NewReader(b))
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	return string(body), err
+}
+
+func (nc *nextcloud) GetHome(ctx context.Context) (string, error) {
+	return nc.do(Action{"GetHome", ""})
+}
+func (nc *nextcloud) CreateHome(ctx context.Context) error {
+	_, err := nc.do(Action{"CreateHome", ""})
+	return err
+}
+func (nc *nextcloud) CreateDir(ctx context.Context, fn string) error {
+	_, err := nc.do(Action{"CreateDir", fn})
+	return err
+}
+func (nc *nextcloud) Delete(ctx context.Context, ref *provider.Reference) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) Move(ctx context.Context, oldRef, newRef *provider.Reference) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) GetMD(ctx context.Context, ref *provider.Reference, mdKeys []string) (*provider.ResourceInfo, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) ListFolder(ctx context.Context, ref *provider.Reference, mdKeys []string) ([]*provider.ResourceInfo, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) InitiateUpload(ctx context.Context, ref *provider.Reference, uploadLength int64, metadata map[string]string) (map[string]string, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) Upload(ctx context.Context, ref *provider.Reference, r io.ReadCloser) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) Download(ctx context.Context, ref *provider.Reference) (io.ReadCloser, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) ListRevisions(ctx context.Context, ref *provider.Reference) ([]*provider.FileVersion, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) DownloadRevision(ctx context.Context, ref *provider.Reference, key string) (io.ReadCloser, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) RestoreRevision(ctx context.Context, ref *provider.Reference, key string) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) ListRecycle(ctx context.Context) ([]*provider.RecycleItem, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) RestoreRecycleItem(ctx context.Context, key, restorePath string) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) PurgeRecycleItem(ctx context.Context, key string) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) EmptyRecycle(ctx context.Context) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) GetPathByID(ctx context.Context, id *provider.ResourceId) (string, error) {
+	return "sorry", gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) AddGrant(ctx context.Context, ref *provider.Reference, g *provider.Grant) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) RemoveGrant(ctx context.Context, ref *provider.Reference, g *provider.Grant) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) UpdateGrant(ctx context.Context, ref *provider.Reference, g *provider.Grant) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) ListGrants(ctx context.Context, ref *provider.Reference) ([]*provider.Grant, error) {
+	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) GetQuota(ctx context.Context) (uint64, uint64, error) {
+	return 0, 0, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) CreateReference(ctx context.Context, path string, targetURI *url.URL) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) Shutdown(ctx context.Context) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) SetArbitraryMetadata(ctx context.Context, ref *provider.Reference, md *provider.ArbitraryMetadata) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+}
+func (nc *nextcloud) UnsetArbitraryMetadata(ctx context.Context, ref *provider.Reference, keys []string) error {
+	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
 }
