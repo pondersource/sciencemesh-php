@@ -118,7 +118,8 @@ func (fs *nextcloud) InitiateUpload(ctx context.Context, ref *provider.Reference
 	}, nil
 }
 func (nc *nextcloud) Upload(ctx context.Context, ref *provider.Reference, r io.ReadCloser) error {
-	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
+	fmt.Println("upload! %s", r)
+	return nil
 }
 func (nc *nextcloud) Download(ctx context.Context, ref *provider.Reference) (io.ReadCloser, error) {
 	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
