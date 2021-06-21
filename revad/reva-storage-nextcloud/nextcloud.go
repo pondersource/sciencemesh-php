@@ -110,8 +110,12 @@ func (nc *nextcloud) GetMD(ctx context.Context, ref *provider.Reference, mdKeys 
 func (nc *nextcloud) ListFolder(ctx context.Context, ref *provider.Reference, mdKeys []string) ([]*provider.ResourceInfo, error) {
 	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
 }
-func (nc *nextcloud) InitiateUpload(ctx context.Context, ref *provider.Reference, uploadLength int64, metadata map[string]string) (map[string]string, error) {
-	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+
+// Copied from https://github.com/cs3org/reva/blob/a8c61401b662d8e09175416c0556da8ef3ba8ed6/pkg/storage/utils/eosfs/upload.go#L77-L81
+func (fs *nextcloud) InitiateUpload(ctx context.Context, ref *provider.Reference, uploadLength int64, metadata map[string]string) (map[string]string, error) {
+	return map[string]string{
+		"simple": ref.GetPath(),
+	}, nil
 }
 func (nc *nextcloud) Upload(ctx context.Context, ref *provider.Reference, r io.ReadCloser) error {
 	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
