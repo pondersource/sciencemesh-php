@@ -29,4 +29,5 @@ $ login basic
 username: einstein
 password: relativity
 $ ls /home
+
 ```

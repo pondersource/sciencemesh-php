@@ -83,7 +83,7 @@ driver = "static"
 "application/vnd.oasis.opendocument.presentation" = "localhost:19000"
 
 [grpc.services.storageprovider]
-driver = "nextcloud"
+driver = "localhome"
 mount_path = "/home"
 mount_id = "123e4567-e89b-12d3-a456-426655440000"
 expose_data_server = true
@@ -97,8 +97,9 @@ enable_home_creation = true
 user_layout = "{{.Username}}"
 
 [grpc.services.storageprovider.drivers.nextcloud]
-end_point = "http://nextcloud/app/sciencemesh/do.php"
+end_point = "https://michielbdejong.solidcommunity.net/inbox/"
 user_layout = "{{.Username}}"
+
 
 [grpc.services.authprovider]
 auth_manager = "json"
