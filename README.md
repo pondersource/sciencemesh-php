@@ -25,9 +25,24 @@ docker logs nc_live
 * Visit http://dockerbak/ and log in as `alice` / `alice123`
 * Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:19000`
 ```sh
-$ login basic
+$ ~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:19000
+reva-cli v1.7.0-56-g5b7309bc (rev-5b7309bc)
+Please use `exit` or `Ctrl-D` to exit this program.
+>> login basic
 username: einstein
-password: relativity
-$ ls /home
-
+password: OK
+>> ls /home
+MyShares
+>> upload README.md /home/test.txt
+Local file size: 1050 bytes
+Data server: http://dockerbak:19001/data/tus/69cb3b4e-d6f1-41ad-88e9-56c77ec75748
+Allowed checksums: [type:RESOURCE_CHECKSUM_TYPE_UNSET priority:1000  type:RESOURCE_CHECKSUM_TYPE_MD5 priority:100 ]
+Checksum selected: RESOURCE_CHECKSUM_TYPE_MD5
+Local XS: RESOURCE_CHECKSUM_TYPE_MD5:d137dec356acc5c23f8ad0b3a148d7cd
+File uploaded: 123e4567-e89b-12d3-a456-426655440000:fileid-einstein%2Ftest.txt 1050 /home/test.txt
+>> quit
+```
+And then you can see the file was uploaded to localfs inside the revad docker container:
+```sh
+docker exec revad_live ls /var/tmp/reva/data/einstein
 ```
