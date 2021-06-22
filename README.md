@@ -41,3 +41,15 @@ And then you can see the file was uploaded to localfs inside the revad docker co
 ```sh
 docker exec revad_live ls /var/tmp/reva/data/einstein
 ```
+
+
+# Develop reva without Docker (untested)
+In your checkout of gh:cs3org/reva, run:
+```sh
+make build-revad-docker
+sudo mkdir -p /etc/revad
+cp ../../pondersource/sciencemesh-nextcloud/revad/providers.json /etc/revad/
+cp ../../pondersource/sciencemesh-nextcloud/revad/usrs.json /etc/revad/
+./cmd/revad/revad -c ../../pondersource/sciencemesh-nextcloud/revad/revad.toml
+```
+And then use `~/gh/cs3org/reva/cmd/reva/reva -insecure -host localhost:19000` to connect.
