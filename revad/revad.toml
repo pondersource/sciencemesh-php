@@ -83,7 +83,7 @@ driver = "static"
 "application/vnd.oasis.opendocument.presentation" = "localhost:19000"
 
 [grpc.services.storageprovider]
-driver = "localhome"
+driver = "nextcloud"
 mount_path = "/home"
 mount_id = "123e4567-e89b-12d3-a456-426655440000"
 expose_data_server = true
@@ -117,7 +117,7 @@ enabled_middlewares = ["providerauthorizer", "cors"]
 address = "0.0.0.0:19001"
 
 [http.services.dataprovider]
-driver = "localhome"
+driver = "nextcloud"
 
 [http.services.prometheus]
 [http.services.sysinfo]
