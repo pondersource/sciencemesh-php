@@ -50,7 +50,7 @@ sudo vim /etc/hosts # add: 127.0.0.1 revadhost
 git clone https://github.com/michielbdejong/reva
 cd reva
 git checkout nextcloud-storage-driver
-make build-revad-docker
+make build-revad
 sudo mkdir -p /var/tmp/reva/data/einstein
 sudo mkdir -p /etc/revad
 sudo cp ../../pondersource/sciencemesh-nextcloud/revad/providers.json /etc/revad/
