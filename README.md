@@ -11,10 +11,10 @@ This repository contains:
 * `run.sh` a shell script that runs Nextcloud + Reva in a local Docker testnet
 
 # How to use
-Set dockerbak in your /etc/hosts to a server that runs docker (in my case I use `64.227.66.5 dockerbak`, you can use `127.0.0.1 dockerbak`), then:
+Set dockerhost and revahost in your /etc/hosts to a server that runs docker (in my case I use `64.227.66.5 dockerhost` and `64.227.66.5 revahost`, you can use `127.0.0.1 dockerhost` and `127.0.0.1 revahost`), then:
 
 ```sh
-export DOCKERHOST=ssh://root@dockerbak
+export DOCKERHOST=ssh://root@dockerhost
 ./build.sh
 ./reset.sh
 ./nc-live.sh
@@ -22,10 +22,10 @@ docker logs nc_live
 ./revad-live.sh
 ```
 
-* Visit http://dockerbak/ and log in as `alice` / `alice123`
-* Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:19000`
+* Visit http://dockerhost/ and log in as `alice` / `alice123`
+* Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000`
 ```sh
-$ ~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerbak:19000
+$ ~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000
 reva-cli v1.7.0-56-g5b7309bc (rev-5b7309bc)
 Please use `exit` or `Ctrl-D` to exit this program.
 >> login basic
@@ -46,10 +46,15 @@ docker exec revad_live ls /var/tmp/reva/data/einstein
 # Develop reva without Docker (untested)
 In your checkout of gh:cs3org/reva, run:
 ```sh
+sudo vim /etc/hosts # add: 127.0.0.1 revahost
+git clone https://github.com/michielbdejong/reva
+cd reva
+git checkout nextcloud-storage-driver
 make build-revad-docker
+sudo mkdir -p /var/tmp/reva/data/einstein
 sudo mkdir -p /etc/revad
-cp ../../pondersource/sciencemesh-nextcloud/revad/providers.json /etc/revad/
-cp ../../pondersource/sciencemesh-nextcloud/revad/usrs.json /etc/revad/
+sudo cp ../../pondersource/sciencemesh-nextcloud/revad/providers.json /etc/revad/
+sudo cp ../../pondersource/sciencemesh-nextcloud/revad/users.json /etc/revad/
 ./cmd/revad/revad -c ../../pondersource/sciencemesh-nextcloud/revad/revad.toml
 ```
 And then use `~/gh/cs3org/reva/cmd/reva/reva -insecure -host localhost:19000` to connect.
