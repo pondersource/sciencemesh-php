@@ -31,22 +31,28 @@ you need to set it to http://revadhost:19001/data or http://dockerhost:19001/dat
 * When running revad-live.sh, connect with reva cli from your laptop, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000`
 * When runnig run-testnet.sh, connect via reva cli from inside the revad container:
 ```sh
-docker exec -it revad /bin/sh
-# /usr/bin/reva -insecure -host localhost:19000
-reva-cli v1.7.0-56-g5b7309bc (rev-5b7309bc)
+$ docker exec -it revad /bin/sh
+/go # /usr/bin/reva -insecure -host localhost:19000
+reva-cli v1.7.0-91-gbd7d6dc9 (rev-bd7d6dc9)
 Please use `exit` or `Ctrl-D` to exit this program.
 >> login basic
 username: einstein
 password: OK
->> ls /home
-MyShares
->> upload --protocol=simple README.md /home/test.txt
-[...]
+>> upload --protocol=simple /etc/revad/revad.toml /home/test.txt
+Local file size: 3607 bytes
+Data server: http://127.0.0.1:19001/data/simple/test.txt
+Allowed checksums: [type:RESOURCE_CHECKSUM_TYPE_MD5 priority:100  type:RESOURCE_CHECKSUM_TYPE_UNSET priority:1000 ]
+Checksum selected: RESOURCE_CHECKSUM_TYPE_MD5
+Local XS: RESOURCE_CHECKSUM_TYPE_MD5:73b039816fdbbeca7faaf626c2fa3e01
+Put "http://127.0.0.1:19001/data/simple/test.txt?xs=73b039816fdbbeca7faaf626c2fa3e01&xs_type=md5": EOF
 >> quit
-```
-And then you can see the file was uploaded to localfs inside the revad docker container:
+/go # exit
+$ docker logs revad
+[...]```
+
+And then you can see the file was uploaded via the revad container to the nc container:
 ```sh
-docker exec revad_live ls /var/tmp/reva/data/einstein
+docker exec nc ls [?]
 ```
 
 
