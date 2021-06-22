@@ -43,7 +43,7 @@ docker exec revad_live ls /var/tmp/reva/data/einstein
 ```
 
 
-# Develop reva without Docker (untested)
+# Develop reva without Docker
 In your checkout of gh:cs3org/reva, run:
 ```sh
 sudo vim /etc/hosts # add: 127.0.0.1 revadhost
