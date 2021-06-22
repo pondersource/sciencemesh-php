@@ -17,13 +17,18 @@ Set dockerhost and revadhost in your /etc/hosts to a server that runs docker and
 export DOCKERHOST=ssh://root@dockerhost
 ./build.sh
 ./reset.sh
-./nc-live.sh
-docker logs nc_live
-./revad-live.sh
+# ./nc-live.sh
+# ./revad-live.sh
+./run-testnet.sh
 ```
 
-* Visit http://dockerhost/ and log in as `alice` / `alice123`
-* Connect with reva cli, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000`
+* When running nc-live.sh, visit http://dockerhost/ and log in as `alice` / `alice123`
+* When running revad-live.sh, connect with reva cli from your laptop, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000`
+* When runnig run-testnet.sh, connect via reva cli from inside the revad container:
+```sh
+docker exec -it revad /bin/sh
+```
+
 ```sh
 $ ~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000
 reva-cli v1.7.0-56-g5b7309bc (rev-5b7309bc)

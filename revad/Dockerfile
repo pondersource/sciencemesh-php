@@ -1,24 +1,9 @@
-FROM golang:alpine as builder
-RUN apk --no-cache add \
-  ca-certificates \
-  bash \
-  git \
-  gcc \
-  libc-dev \
-  make
-
-ENV PATH /go/bin:/usr/local/go/bin:$PATH
-ENV GOPATH /go
-
-WORKDIR /go/src/github/cs3org
-RUN git clone https://github.com/michielbdejong/reva
-WORKDIR /go/src/github/cs3org/reva
-RUN git checkout nextcloud-storage-driver
-
+FROM revad-base as builder
+RUN git pull
 RUN make build-revad-docker && \
     cp /go/src/github/cs3org/reva/cmd/revad/revad /go/bin/revad
-
-RUN mkdir -p /etc/revad/ && echo "" > /etc/revad/revad.toml
+RUN make build-reva-docker && \
+    cp /go/src/github/cs3org/reva/cmd/reva/reva /go/bin/reva
 
 FROM golang:alpine
 
@@ -29,6 +14,7 @@ EXPOSE 9999 10000
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/bin/revad /usr/bin/revad
+COPY --from=builder /go/bin/reva /usr/bin/reva
 COPY --from=builder /etc/revad /etc/revad
 
 ADD revad.toml /etc/revad/revad.toml
