@@ -51,13 +51,15 @@ $ docker logs revad
 [...]
 $ docker logs nc
 [...]
-172.22.0.3 - - [22/Jun/2021:20:18:03 +0000] "PUT /apps/sciencemesh/test HTTP/1.1" 302 1489 "-" "Go-http-client/1.1"
-172.22.0.3 - - [22/Jun/2021:20:18:04 +0000] "GET /login HTTP/1.1" 200 5092 "http://nc/apps/sciencemesh/test" "Go-http-client/1.1"
 ```
 
 And then you can see the file was uploaded via the revad container to the nc container:
 ```sh
-docker exec nc ls [?]
+$ docker exec nc ls -la data/alice/files/sciencemesh
+total 12
+drwxr-xr-x 2 www-data www-data 4096 Jun 22 20:25 .
+drwxr-xr-x 6 www-data www-data 4096 Jun 22 20:25 ..
+-rw-r--r-- 1 www-data www-data 3607 Jun 22 20:25 test
 ```
 
 # Develop reva without Docker
