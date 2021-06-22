@@ -105,7 +105,7 @@ func (nc *nextcloud) Move(ctx context.Context, oldRef, newRef *provider.Referenc
 	return gstatus.Errorf(codes.Unimplemented, "method not implemented")
 }
 func (nc *nextcloud) GetMD(ctx context.Context, ref *provider.Reference, mdKeys []string) (*provider.ResourceInfo, error) {
-	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
+	return &provider.ResourceInfo{}, nil
 }
 func (nc *nextcloud) ListFolder(ctx context.Context, ref *provider.Reference, mdKeys []string) ([]*provider.ResourceInfo, error) {
 	return nil, gstatus.Errorf(codes.Unimplemented, "method not implemented")
