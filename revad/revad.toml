@@ -83,12 +83,13 @@ driver = "static"
 "application/vnd.oasis.opendocument.presentation" = "localhost:19000"
 
 [grpc.services.storageprovider]
-driver = "nextcloud"
+driver = "localhome"
 mount_path = "/home"
 mount_id = "123e4567-e89b-12d3-a456-426655440000"
 expose_data_server = true
 data_server_url = "http://dockerbak:19001/data"
 enable_home_creation = true
+disable_tus = true
 
 [grpc.services.storageprovider.mimetypes]
 ".zmd" = "application/compressed-markdown"
@@ -116,7 +117,7 @@ enabled_middlewares = ["providerauthorizer", "cors"]
 address = "0.0.0.0:19001"
 
 [http.services.dataprovider]
-driver = "nextcloud"
+driver = "localhome"
 
 [http.services.prometheus]
 [http.services.sysinfo]
