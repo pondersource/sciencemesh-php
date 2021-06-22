@@ -33,7 +33,7 @@ username: einstein
 password: OK
 >> ls /home
 MyShares
->> upload README.md /home/test.txt
+>> upload --protocol=simple README.md /home/test.txt
 [...]
 >> quit
 ```
