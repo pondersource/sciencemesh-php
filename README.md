@@ -37,7 +37,7 @@ reva-cli v1.7.0-91-gbd7d6dc9 (rev-bd7d6dc9)
 Please use `exit` or `Ctrl-D` to exit this program.
 >> login basic
 username: einstein
-password: OK
+password: OK # relativity
 >> upload --protocol=simple /etc/revad/revad.toml /home/test.txt
 Local file size: 3607 bytes
 Data server: http://127.0.0.1:19001/data/simple/test.txt
@@ -48,13 +48,17 @@ Put "http://127.0.0.1:19001/data/simple/test.txt?xs=73b039816fdbbeca7faaf626c2fa
 >> quit
 /go # exit
 $ docker logs revad
-[...]```
+[...]
+$ docker logs nc
+[...]
+172.22.0.3 - - [22/Jun/2021:20:18:03 +0000] "PUT /apps/sciencemesh/test HTTP/1.1" 302 1489 "-" "Go-http-client/1.1"
+172.22.0.3 - - [22/Jun/2021:20:18:04 +0000] "GET /login HTTP/1.1" 200 5092 "http://nc/apps/sciencemesh/test" "Go-http-client/1.1"
+```
 
 And then you can see the file was uploaded via the revad container to the nc container:
 ```sh
 docker exec nc ls [?]
 ```
-
 
 # Develop reva without Docker
 In your checkout of gh:cs3org/reva, run:
