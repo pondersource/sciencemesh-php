@@ -22,15 +22,17 @@ export DOCKERHOST=ssh://root@dockerhost
 ./run-testnet.sh
 ```
 
+### FIXME:
+`revad.toml` currently has the data server url as http://127.0.0.1:19001/data
+This works for the run-testnet.sh instructions, but for the revad-live.sh instructions
+you need to set it to http://revadhost:19001/data or http://dockerhost:19001/data.
+
 * When running nc-live.sh, visit http://dockerhost/ and log in as `alice` / `alice123`
 * When running revad-live.sh, connect with reva cli from your laptop, for instance `~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000`
 * When runnig run-testnet.sh, connect via reva cli from inside the revad container:
 ```sh
 docker exec -it revad /bin/sh
-```
-
-```sh
-$ ~/gh/cs3org/reva/cmd/reva/reva -insecure -host dockerhost:19000
+# /usr/bin/reva -insecure -host localhost:19000
 reva-cli v1.7.0-56-g5b7309bc (rev-5b7309bc)
 Please use `exit` or `Ctrl-D` to exit this program.
 >> login basic
