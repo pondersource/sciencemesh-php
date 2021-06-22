@@ -11,15 +11,16 @@ RUN apt-get update && apt-get install -yq \
   git \
   python3-certbot-apache \
   vim
-WORKDIR /install
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
+# WORKDIR /install
+# RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+# RUN php composer-setup.php
+# RUN php -r "unlink('composer-setup.php');"
+RUN git clone https://github.com/ylebre/sciencemesh-nextcloud /usr/src/nextcloud/apps/sciencemesh
 WORKDIR /usr/src/nextcloud/apps/sciencemesh
-RUN php /install/composer.phar require symfony/orm-pack
-RUN php /install/composer.phar update
-RUN php /install/composer.phar install --no-dev --prefer-dist
+RUN make
+# RUN php /install/composer.phar require symfony/orm-pack
+# RUN php /install/composer.phar update
+# RUN php /install/composer.phar install --no-dev --prefer-dist
 WORKDIR /var/www/html
 ADD init.sh /
-ADD nc-sciencemesh/ /sciencemesh/
 EXPOSE 443

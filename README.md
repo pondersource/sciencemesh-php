@@ -11,7 +11,7 @@ This repository contains:
 * `run.sh` a shell script that runs Nextcloud + Reva in a local Docker testnet
 
 # How to use
-Set dockerhost and revadhost in your /etc/hosts to a server that runs docker (in my case I use `64.227.66.5 dockerhost` and `64.227.66.5 revadhost`, you can use `127.0.0.1 dockerhost` and `127.0.0.1 revadhost`), then:
+Set dockerhost and revadhost in your /etc/hosts to a server that runs docker and to which you have root ssh access (in my case I use `64.227.66.5 dockerhost` and `64.227.66.5 revadhost`, you can use `127.0.0.1 dockerhost` and `127.0.0.1 revadhost`), then:
 
 ```sh
 export DOCKERHOST=ssh://root@dockerhost
