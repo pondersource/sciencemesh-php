@@ -95,7 +95,7 @@ disable_tus = true
 ".zmd" = "application/compressed-markdown"
 
 [grpc.services.storageprovider.drivers.nextcloud]
-end_point = "https://michielbdejong.solidcommunity.net/inbox/"
+end_point = "http://nc/apps/sciencemesh/~alice/"
 user_layout = "{{.Username}}"
 
 
