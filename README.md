@@ -44,7 +44,7 @@ Data server: http://127.0.0.1:19001/data/simple/test.txt
 Allowed checksums: [type:RESOURCE_CHECKSUM_TYPE_MD5 priority:100  type:RESOURCE_CHECKSUM_TYPE_UNSET priority:1000 ]
 Checksum selected: RESOURCE_CHECKSUM_TYPE_MD5
 Local XS: RESOURCE_CHECKSUM_TYPE_MD5:73b039816fdbbeca7faaf626c2fa3e01
-Put "http://127.0.0.1:19001/data/simple/test.txt?xs=73b039816fdbbeca7faaf626c2fa3e01&xs_type=md5": EOF
+File uploaded: 123e4567-e89b-12d3-a456-426655440000:fileid-some-file.txt 0 /home/some-file.txt
 >> quit
 /go # exit
 $ docker logs revad
