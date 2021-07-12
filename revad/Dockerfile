@@ -1,5 +1,6 @@
 FROM revad-base as builder
 RUN git pull
+RUN git checkout use-nc-paths
 RUN make build-revad-docker && \
     cp /go/src/github/cs3org/reva/cmd/revad/revad /go/bin/revad
 RUN make build-reva-docker && \

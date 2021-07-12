@@ -24,7 +24,7 @@ Please use `exit` or `Ctrl-D` to exit this program.
 >> login basic
 username: einstein
 password: OK # relativity
->> upload --protocol=simple /etc/revad/revad.toml /home/test.txt
+>> upload --protocol=simple /etc/revad/revad.toml /home/some-file.txt
 Local file size: 3607 bytes
 Data server: http://127.0.0.1:19001/data/simple/test.txt
 Allowed checksums: [type:RESOURCE_CHECKSUM_TYPE_MD5 priority:100  type:RESOURCE_CHECKSUM_TYPE_UNSET priority:1000 ]
