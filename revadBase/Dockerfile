@@ -13,7 +13,7 @@ ENV GOPATH /go
 WORKDIR /go/src/github/cs3org
 RUN git clone https://github.com/michielbdejong/reva
 WORKDIR /go/src/github/cs3org/reva
-RUN git checkout nextcloud-storage-driver
+RUN git checkout 4a36630f
 
 RUN make build-revad-docker && \
     cp /go/src/github/cs3org/reva/cmd/revad/revad /go/bin/revad
