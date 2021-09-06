@@ -3,7 +3,7 @@ Connect your Nextcloud server to Sciencemesh
 
 This repository contains:
 
-* `nc/`, a Docker image for Nextcloud that uses Nextcloud with [Yvo's app](https://github.com/ylebre/sciencemesh-nextcloud)
+* `nc/`, a Docker image for Nextcloud that uses Nextcloud with [Yvo's app](https://github.com/pondersource/nc-sciencemesh)
 * `revad/`, a Docker image for `revad` that uses [Reva with Michiel's storage driver](https://github.com/michielbdejong/reva/tree/nextcloud-storage-driver)
 * `revadBase/`, a helper Dockerfile to make rebuilds go faster
 * `build.sh` a shell script that builds Nextcloud + Reva Docker images
