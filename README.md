@@ -49,17 +49,18 @@ drwxr-xr-x 6 www-data www-data 4096 Jun 22 20:25 ..
 ```
 
 # Develop reva without Docker
-In your checkout of gh:cs3org/reva, run:
+Make sure you have Nextcloud with https://github.com/pondersource/nc-sciencemesh running on localhost,
+for instance by running `./build.sh && ./nc-live.sh` in this repo, or setting Nextcloud up in some
+other way and then installing the nc-sciencemesh app manually.
+
+Then, in your checkout of gh:cs3org/reva, run:
 ```sh
 sudo vim /etc/hosts # add: 127.0.0.1 revadhost
 git clone https://github.com/michielbdejong/reva
 cd reva
-git checkout nextcloud-storage-driver
+git checkout nextcloud-integration
 make build-revad
-sudo mkdir -p /var/tmp/reva/data/einstein
-sudo mkdir -p /etc/revad
-sudo cp ../../pondersource/sciencemesh-nextcloud/revad/providers.json /etc/revad/
-sudo cp ../../pondersource/sciencemesh-nextcloud/revad/users.json /etc/revad/
-./cmd/revad/revad -c ../../pondersource/sciencemesh-nextcloud/revad/revad.toml
+GODEBUG=netdns=go  ./cmd/revad/revad -c examples/nextcloud-integration/revad.toml 
 ```
-And then use `~/gh/cs3org/reva/cmd/reva/reva -insecure -host localhost:19000` to connect.
+And then use `~/gh/cs3org/reva/cmd/reva/reva -insecure -host localhost:19000`
+to connect.
