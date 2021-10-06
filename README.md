@@ -64,3 +64,45 @@ GODEBUG=netdns=go  ./cmd/revad/revad -c examples/nextcloud-integration/revad.tom
 ```
 And then use `~/gh/cs3org/reva/cmd/reva/reva -insecure -host localhost:19000`
 to connect.
+
+# Run tests
+You can run the tests of nc-sciencemesh itself as follows:
+
+
+## nc-sciencemesh tests
+* Clone [nextcloud/server](https://github.com/nextcloud/server)
+* Install its dependencies, including the one for SQLite, and PHP (e.g. php 7.4)
+* Run `php -S localhost:8080`, browse to https://localhost:8080, and make `einstein`/`relativity` the admin user
+* Also create a `tester`/`root` user
+* Clone [nc-sciencemesh]((https://github.com/pondersource/nc-sciencemesh) into the `apps/sciencemesh` folder (make sure you use that exact path, so not `apps/nc-sciencemesh` or anything else) of your Nextcloud repo.
+* Log in as `einstein`, go to apps and activate the Sciencemesh app
+* Log in as `tester` and do the same
+* You can now cd into nextcloud/server/apps/sciencemesh and run `make test`
+
+## reva unit tests with mocked Nextcloud server
+* Clone [reva](https://github.com/cs3org/reva)
+* Add Michiel's remote with `git remote add michielbdejong https://github.com/michielbdejong/reva
+* `git fetch michielbdejong`
+* `git checkout test-nextcloud-only`
+*  Install reva's dependencies
+*  Run `make build`
+* Now run:
+  * `go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...
+  * `go test -v github.com/cs3org/reva/pkg/sharing/manager/nextcloud/...
+  * `go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...
+
+## reva integration tests with mocked Nextcloud server
+* cd to cs3org/reva/tests/integration
+* `go test -v github.com/cs3org/reva/integration/grpc/...`
+
+## reva unit & integration tests against Nextcloud+Sciencemesh
+You need 5 terminal windows open: cs3org/reva, nextcloud/server, nextcloud/server/apps/sciencemesh, nextcloud/server/data/einstein, nextcloud/server/data
+* In the nextcloud/server/apps/sciencemesh window, you can edit the php code to add debug statements and fixes
+* In the nextcloud/server/data/einstein window, you see how einstein's data is changed as a side-effect of the tests
+* In the nextcloud/server/data window, you can `tail -f nextcloud.log` to see `500 internal server error`s
+* In the nextcloud/server window you can run `php -S localhost:8080` and view the logs, e.g. when API endpoints are 404s etc, and when you `error_log` in your php
+* In the reva window, run:
+  * `NEXTCLOUD=http://localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...
+  * `NEXTCLOUD=http://localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/sharing/manager/nextcloud/...
+  * `NEXTCLOUD=http://localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...
+  * `NEXTCLOUD=http://localhost:8080/index.php go test -v github.com/cs3org/reva/integration/grpc/...`
