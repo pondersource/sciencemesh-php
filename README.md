@@ -103,7 +103,7 @@ You need 5 terminal windows open: cs3org/reva, nextcloud/server, nextcloud/serve
 * In the nextcloud/server/data window, you can `tail -f nextcloud.log` to see `500 internal server error`s
 * In the nextcloud/server window you can run `php -S localhost:8080` and view the logs, e.g. when API endpoints are 404s etc, and when you `error_log` in your php
 * In the reva window, run:
-  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...
-  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/share/manager/nextcloud/...
-  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...
+  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...`
+  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/share/manager/nextcloud/...`
+  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...`
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/integration/grpc/...`
