@@ -88,9 +88,9 @@ You can run the tests of nc-sciencemesh itself as follows:
 *  Install reva's dependencies
 *  Run `make build`
 * Now run:
-  * `go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...
-  * `go test -v github.com/cs3org/reva/pkg/share/manager/nextcloud/...
-  * `go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...
+  * `go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...`
+  * `go test -v github.com/cs3org/reva/pkg/share/manager/nextcloud/...`
+  * `go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...`
 
 ## reva integration tests with mocked Nextcloud server
 * cd to cs3org/reva/tests/integration
