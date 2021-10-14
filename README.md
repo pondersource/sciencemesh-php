@@ -84,13 +84,14 @@ You can run the tests of nc-sciencemesh itself as follows:
 * Clone [reva](https://github.com/cs3org/reva)
 * Add Michiel's remote with `git remote add michielbdejong https://github.com/michielbdejong/reva
 * `git fetch michielbdejong`
-* `git checkout test-nextcloud-only`
+* `git checkout nextcloud-ocm-share`
 *  Install reva's dependencies
 *  Run `make build`
 * Now run:
   * `go test -v github.com/cs3org/reva/pkg/storage/fs/nextcloud/...`
   * `go test -v github.com/cs3org/reva/pkg/share/manager/nextcloud/...`
   * `go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...`
+  * `go test github.com/cs3org/reva/pkg/ocm/share/manager/nextcloud/...`
 
 ## reva integration tests with mocked Nextcloud server
 * cd to cs3org/reva/tests/integration
@@ -107,3 +108,4 @@ You need 5 terminal windows open: cs3org/reva, nextcloud/server, nextcloud/serve
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/share/manager/nextcloud/...`
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...`
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/integration/grpc/...`
+  * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test github.com/cs3org/reva/pkg/ocm/share/manager/nextcloud/...`
