@@ -71,7 +71,6 @@ For instance on Ubuntu:
 apt update
 apt install -y php7.4 git php-curl php-gd php7.4-opcache php7.4-xml php7.4-gd php7.4-mbstring php7.4-curl php7.4-zip php7.4-json libxml2 libxml2-dev php-xml php-mbstring php-zip build-essential curl php-sqlite3
 ```
-(todo: install sqlite?)
 
 # Run tests
 You can run the tests of nc-sciencemesh itself as follows:
@@ -79,7 +78,12 @@ You can run the tests of nc-sciencemesh itself as follows:
 ## nc-sciencemesh tests
 * Clone [nextcloud/server](https://github.com/nextcloud/server)
 * `cd server ; git submodule update --init`
-* Run `php -S localhost:8080`, browse to https://localhost:8080, and make `einstein`/`relativity` the admin user
+* Run `php -S localhost:8080`, browse to https://localhost:8080, and make `einstein`/`relativity` the admin user. Alternatively:
+```sh
+export PHP_MEMORY_LIMIT="512M"
+php console.php maintenance:install --admin-user einstein --admin-pass relativity
+php console.php app:enable sciencemesh
+```
 * Also create a `tester`/`root` user
 * Inside the tester's root folder(data/tester/files/sciencemesh), create some/path/test.json
 * Clone [nc-sciencemesh]((https://github.com/pondersource/nc-sciencemesh) into the `apps/sciencemesh` folder (make sure you use that exact path, so not `apps/nc-sciencemesh` or anything else) of your Nextcloud repo.
