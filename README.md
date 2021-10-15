@@ -71,13 +71,14 @@ For instance on Ubuntu:
 apt update
 apt install -y php7.4 git php-curl php-gd php7.4-opcache php7.4-xml php7.4-gd php7.4-mbstring php7.4-curl php7.4-zip php7.4-json libxml2 libxml2-dev php-xml php-mbstring php-zip build-essential curl
 ```
+(todo: install sqlite?)
 
 # Run tests
 You can run the tests of nc-sciencemesh itself as follows:
 
 ## nc-sciencemesh tests
 * Clone [nextcloud/server](https://github.com/nextcloud/server)
-* Install its dependencies, including the one for SQLite, and PHP (e.g. php 7.4)
+* `cd server ; git submodule update --init`
 * Run `php -S localhost:8080`, browse to https://localhost:8080, and make `einstein`/`relativity` the admin user
 * Also create a `tester`/`root` user
 * Inside the tester's root folder(data/tester/files/sciencemesh), create some/path/test.json
