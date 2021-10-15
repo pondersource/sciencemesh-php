@@ -91,9 +91,9 @@ php console.php app:enable sciencemesh
 * Clone [nc-sciencemesh]((https://github.com/pondersource/nc-sciencemesh) into the `apps/sciencemesh` folder (make sure you use that exact path, so not `apps/nc-sciencemesh` or anything else) of your Nextcloud repo.
 * Log in as `einstein`, go to apps and activate the Sciencemesh app
 * Log in as `tester` and do the same
-* You can now cd into nextcloud/server/apps/sciencemesh and run `make test` or:
+* You can now cd into nextcloud/server/apps/sciencemesh and run `XDEBUG_MODE=coverage make test` or:
 ```sh
-./vendor/phpunit/phpunit/phpunit -c phpunit.xml --coverage-html cov.html
+XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit -c phpunit.xml --coverage-html cov.html
 ```
 
 ## reva unit tests with mocked Nextcloud server
