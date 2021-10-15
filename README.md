@@ -71,7 +71,7 @@ For instance on Ubuntu:
 apt update
 apt install -y php7.3 git php-curl php-gd php7.3-opcache php7.3-xml php7.3-gd \
   php7.3-curl php7.3-zip php7.3-json libxml2 libxml2-dev php-xml php-mbstring \
-  build-essential curl php-sqlite3 php-xdebug sqlite3 php7.3-mbstring php-zip
+  build-essential curl php7.3-sqlite3 php-xdebug php7.3-mbstring php-zip
 ```
 
 # Run tests
