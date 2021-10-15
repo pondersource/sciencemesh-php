@@ -93,7 +93,7 @@ php console.php app:enable sciencemesh
 * Log in as `tester` and do the same
 * You can now cd into nextcloud/server/apps/sciencemesh and run `XDEBUG_MODE=coverage make test` or:
 ```sh
-XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit -c phpunit.xml --coverage-html cov.html
+XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
 ```
 
 ## reva unit tests with mocked Nextcloud server
