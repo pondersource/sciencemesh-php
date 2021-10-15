@@ -65,9 +65,15 @@ GODEBUG=netdns=go  ./cmd/revad/revad -c examples/nextcloud-integration/revad.tom
 And then use `~/gh/cs3org/reva/cmd/reva/reva -insecure -host localhost:19000`
 to connect.
 
+# Install dependencies
+For instance on Ubuntu:
+```sh
+apt update
+apt install -y php7.4 git php-curl php-gd php7.4-opcache php7.4-xml php7.4-gd php7.4-mbstring php7.4-curl php7.4-zip php7.4-json libxml2 libxml2-dev php-xml php-mbstring php-zip build-essential
+```
+
 # Run tests
 You can run the tests of nc-sciencemesh itself as follows:
-
 
 ## nc-sciencemesh tests
 * Clone [nextcloud/server](https://github.com/nextcloud/server)
