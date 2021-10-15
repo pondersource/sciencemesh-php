@@ -69,7 +69,9 @@ to connect.
 For instance on Ubuntu:
 ```sh
 apt update
-apt install -y php7.4 git php-curl php-gd php7.4-opcache php7.4-xml php7.4-gd php7.4-mbstring php7.4-curl php7.4-zip php7.4-json libxml2 libxml2-dev php-xml php-mbstring php-zip build-essential curl php-sqlite3
+apt install -y php7.4 git php-curl php-gd php7.4-opcache php7.4-xml php7.4-gd php7.4-mbstring \
+  php7.4-curl php7.4-zip php7.4-json libxml2 libxml2-dev php-xml php-mbstring php-zip \
+  build-essential curl php-sqlite3 php-xdebug
 ```
 
 # Run tests
@@ -89,7 +91,7 @@ php console.php app:enable sciencemesh
 * Clone [nc-sciencemesh]((https://github.com/pondersource/nc-sciencemesh) into the `apps/sciencemesh` folder (make sure you use that exact path, so not `apps/nc-sciencemesh` or anything else) of your Nextcloud repo.
 * Log in as `einstein`, go to apps and activate the Sciencemesh app
 * Log in as `tester` and do the same
-* You can now cd into nextcloud/server/apps/sciencemesh and run `make test`
+* You can now cd into nextcloud/server/apps/sciencemesh and run `make test` or `./vendor/phpunit/phpunit/phpunit -c phpunit.xml --coverage-html cov.html`
 
 ## reva unit tests with mocked Nextcloud server
 * Clone [reva](https://github.com/cs3org/reva)
