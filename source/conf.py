@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'revanc'
+project = 'sciencemesh-nextcloud'
 copyright = '2021, Michiel de Jong, Yvo Brevoort, Triantafullenia Doumani, Benz Schenk, Ismoil Shifoev'
 author = 'Michiel de Jong, Yvo Brevoort, Triantafullenia Doumani, Benz Schenk, Ismoil Shifoev'
 

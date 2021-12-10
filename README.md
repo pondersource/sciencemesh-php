@@ -1,9 +1,17 @@
 # sciencemesh-nextcloud
 Connect your Nextcloud server to Sciencemesh
 
-*** under development ***
-
 This repo is mainly an overview of the sciencemesh-nextcloud project
+
+# Building the docs
+ 
+```
+pip install sphinx
+make html
+```
+
+If you push to github, the change made to `./source` will be reflected 
+on [the microsite](https://sciencemesh-nextcloud.readthedocs.io/).
 
 # Development setup
 
