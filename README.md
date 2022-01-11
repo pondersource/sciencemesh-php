@@ -110,3 +110,80 @@ You need 5 terminal windows open: cs3org/reva, nextcloud/server, nextcloud/serve
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/pkg/user/manager/nextcloud/...`
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test -v github.com/cs3org/reva/integration/grpc/...`
   * `NEXTCLOUD=http://einstein:relativity@localhost:8080/index.php go test github.com/cs3org/reva/pkg/ocm/share/manager/nextcloud/...`
+
+# Demo setup
+On nc1.pondersource.net:
+```sh
+apt update ; apt install -y docker.io certbot
+certbot certonly --standalone
+# follow instructions
+git clone https://github.com/cs3org/ocm-test-suite
+cd ocm-test-suite
+git checkout revanc
+cd servers/apache-php
+mkdir tls
+cp /etc/letsencrypt/live/nc1.pondersource.net/fullchain.pem tls/nc1.crt
+cp /etc/letsencrypt/live/nc1.pondersource.net/privkey.pem tls/nc1.key
+docker build -t apache-php .
+cd ../nextcloud
+docker build -t nextcloud .
+cd ../nc1
+docker build -t nc1 .
+docker run -d --network=host -e MARIADB_ROOT_PASSWORD=1234 --name=maria1.docker mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+docker run --network=host -d nc1
+```
+
+On nc2.pondersource.net:
+```sh
+apt update ; apt install -y docker.io certbot
+certbot certonly --standalone
+# follow instructions
+git clone https://github.com/cs3org/ocm-test-suite
+cd ocm-test-suite
+git checkout revanc
+cd servers/apache-php
+mkdir tls
+cp /etc/letsencrypt/live/nc2.pondersource.net/fullchain.pem tls/nc2.crt
+cp /etc/letsencrypt/live/nc2.pondersource.net/privkey.pem tls/nc2.key
+docker build -t apache-php .
+cd ../nextcloud
+docker build -t nextcloud .
+cd ../nc2
+docker build -t nc2 .
+docker run -d --network=host -e MARIADB_ROOT_PASSWORD=1234 --name=maria2.docker mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+docker run --network=host -d nc2
+```
+
+On reva1.pondersource.net:
+```sh
+apt update ; apt install -y docker.io certbot
+certbot certonly --standalone
+# follow instructions
+git clone https://github.com/cs3org/ocm-test-suite
+cd ocm-test-suite
+git checkout revanc
+cd servers/revad
+mkdir tls
+cp /etc/letsencrypt/live/revad1.pondersource.net/fullchain.pem tls/server.cert
+cp /etc/letsencrypt/live/revad1.pondersource.net/privkey.pem tls/server.key
+touch tls/example.crt
+docker build -t revad .
+docker run --network=host -d revad
+```
+
+On reva2.pondersource.net:
+```sh
+apt update ; apt install -y docker.io certbot
+certbot certonly --standalone
+# follow instructions
+git clone https://github.com/cs3org/ocm-test-suite
+cd ocm-test-suite
+git checkout revanc
+cd servers/revad
+mkdir tls
+cp /etc/letsencrypt/live/revad2.pondersource.net/fullchain.pem tls/server.cert
+cp /etc/letsencrypt/live/revad2.pondersource.net/privkey.pem tls/server.key
+touch tls/example.crt
+docker build -t revad .
+docker run --network=host -d revad
+```
