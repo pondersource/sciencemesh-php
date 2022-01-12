@@ -129,8 +129,10 @@ cd ../nextcloud
 docker build -t nextcloud .
 cd ../nc1
 docker build -t nc1 .
-docker run -d --network=host -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria1.docker mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
-docker run --network=host -d nc1
+docker create network testnet
+docker run -d --network=testnet -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria1.docker --restart unless-stopped mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+docker run --network=testnet --publish 443:443 -d --name=nc1.docker --restart unless-stopped nc1
+docker exec -it -u www-data nc1.docker /bin/bash /init.sh
 ```
 
 On nc2.pondersource.net:
@@ -150,8 +152,10 @@ cd ../nextcloud
 docker build -t nextcloud .
 cd ../nc2
 docker build -t nc2 .
-docker run -d --network=host -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria2.docker mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
-docker run --network=host -d nc2
+docker create network testnet
+docker run -d --network=testnet -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria1.docker --restart unless-stopped mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+docker run --network=testnet --publish 443:443 -d --name=nc2.docker --restart unless-stopped nc2
+docker exec -it -u www-data nc2.docker /bin/bash /init.sh
 ```
 
 On reva1.pondersource.net:
