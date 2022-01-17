@@ -133,6 +133,9 @@ docker network create testnet
 docker run -d --network=testnet -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria1.docker --restart unless-stopped mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
 docker run --network=testnet --publish 443:443 -d --name=nc1.docker --restart unless-stopped nc1
 docker exec -it -u www-data nc1.docker /bin/bash /init.sh
+docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'iopUrl', 'https://reva1.pondersource.net/');"
+docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'revaSharedSecret', 'shared-secret-1');"
+docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "select * from oc_appconfig where appid='sciencemesh';"
 ```
 
 On nc2.pondersource.net:
@@ -156,6 +159,10 @@ docker network create testnet
 docker run -d --network=testnet -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria2.docker --restart unless-stopped mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
 docker run --network=testnet --publish 443:443 -d --name=nc2.docker --restart unless-stopped nc2
 docker exec -it -u www-data nc2.docker /bin/bash /init.sh
+docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'iopUrl', 'https://reva2.pondersource.net/');"
+docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'revaSharedSecret', 'shared-secret-2');"
+docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "select * from oc_appconfig where appid='sciencemesh';"
+
 ```
 
 On reva1.pondersource.net:
@@ -168,11 +175,11 @@ cd ocm-test-suite
 git checkout revanc
 cd servers/revad
 mkdir tls
-cp /etc/letsencrypt/live/revad1.pondersource.net/fullchain.pem tls/server.cert
-cp /etc/letsencrypt/live/revad1.pondersource.net/privkey.pem tls/server.key
+cp /etc/letsencrypt/live/reva1.pondersource.net/fullchain.pem tls/server.crt
+cp /etc/letsencrypt/live/reva1.pondersource.net/privkey.pem tls/server.key
 touch tls/example.crt
 docker build -t revad .
-docker run --network=host -d revad
+docker run --network=host -d --restart unless-stopped -e HOST=reva1.pondersource.net --name reva1.pondersource.net revad
 ```
 
 On reva2.pondersource.net:
@@ -185,9 +192,9 @@ cd ocm-test-suite
 git checkout revanc
 cd servers/revad
 mkdir tls
-cp /etc/letsencrypt/live/revad2.pondersource.net/fullchain.pem tls/server.cert
-cp /etc/letsencrypt/live/revad2.pondersource.net/privkey.pem tls/server.key
+cp /etc/letsencrypt/live/reva2.pondersource.net/fullchain.pem tls/server.crt
+cp /etc/letsencrypt/live/reva2.pondersource.net/privkey.pem tls/server.key
 touch tls/example.crt
 docker build -t revad .
-docker run --network=host -d revad
+docker run --network=host -d --restart unless-stopped revad
 ```

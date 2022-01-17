@@ -1,9 +1,9 @@
 Admin Documentation
 ===================
-Configure "iopUrl" to point to your revad instance. You can check this value in your Nextcloud database:
-```
-select * from oc_appconfig where appid='sciencemesh';
-```
+Configure "iopUrl" to point to your revad instance. You can check this value in your Nextcloud database::
+
+  select * from oc_appconfig where appid='sciencemesh';
+
 Make sure that `revaSharedSecret` in there matches the `shared_secret` entry in the following sections of your revad.toml file:
 
 * [grpc.services.storageprovider.drivers.nextcloud]
