@@ -132,14 +132,10 @@ docker build -t nc1 .
 cd /root
 git clone https://github.com/pondersource/nc-sciencemesh
 docker network create testnet
-docker run -d --network=testnet -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria1.docker --restart unless-stopped mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
-docker run --network=testnet --publish 443:443 -d --name=nc1.docker -v /root/nc-sciencemesh:/var/www/html/apps/sciencemesh --restart unless-stopped nc1
-docker exec -it -u www-data nc1.docker /bin/bash /init.sh
-docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'iopUrl', 'https://reva1.pondersource.net/');"
-docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'revaSharedSecret', 'shared-secret-1');"
-docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "select * from oc_appconfig where appid='sciencemesh';"
-docker exec -it nc1.docker /bin/bash -c "cd apps/sciencemesh && make build"
+cd nc-sciencemesh
+./restart-nc1.sh
 ```
+(and rerun `./restart-nc1.sh` to restart)
 
 On nc2.pondersource.net:
 ```sh
@@ -161,14 +157,10 @@ docker build -t nc2 .
 cd /root
 git clone https://github.com/pondersource/nc-sciencemesh
 docker network create testnet
-docker run -d --network=testnet -e MARIADB_ROOT_PASSWORD=eilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek --name=maria2.docker --restart unless-stopped mariadb --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
-docker run --network=testnet --publish 443:443 -d --name=nc2.docker -v /root/nc-sciencemesh:/var/www/html/apps/sciencemesh --restart unless-stopped nc2
-docker exec -it -u www-data nc2.docker /bin/bash /init.sh
-docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'iopUrl', 'https://reva2.pondersource.net/');"
-docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'revaSharedSecret', 'shared-secret-2');"
-docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "select * from oc_appconfig where appid='sciencemesh';"
-docker exec -it nc2.docker /bin/bash -c "cd apps/sciencemesh && make build"
+cd nc-sciencemesh
+./restart-nc2.sh
 ```
+(and rerun `./restart-nc1.sh` to restart)
 
 On reva1.pondersource.net:
 ```sh
@@ -192,6 +184,13 @@ docker run -v /root/reva:/reva revad /bin/bash -c "cd /reva && export PATH=$PATH
 docker run --network=host -d --restart unless-stopped -e HOST=reva1.pondersource.net --name reva1.pondersource.net -v /root/reva:/reva revad
 ```
 
+And to restart:
+```sh
+docker stop `docker ps -q`
+docker rm `docker ps -qa`
+docker run --network=host -d --restart unless-stopped -e HOST=reva1.pondersource.net --name reva1.pondersource.net -v /root/reva:/reva revad
+```
+
 On reva2.pondersource.net:
 ```sh
 apt update ; apt install -y docker.io certbot
@@ -211,5 +210,12 @@ git clone https://github.com/cs3org/reva
 cd reva
 git checkout edge
 docker run -v /root/reva:/reva revad /bin/bash -c "cd /reva && export PATH=$PATH:/usr/local/go/bin && make deps && make build-revad"
+docker run --network=host -d --restart unless-stopped -e HOST=reva2.pondersource.net --name reva2.pondersource.net -v /root/reva:/reva revad
+```
+
+And to restart:
+```sh
+docker stop `docker ps -q`
+docker rm `docker ps -qa`
 docker run --network=host -d --restart unless-stopped -e HOST=reva2.pondersource.net --name reva2.pondersource.net -v /root/reva:/reva revad
 ```
