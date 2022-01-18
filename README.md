@@ -138,6 +138,7 @@ docker exec -it -u www-data nc1.docker /bin/bash /init.sh
 docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'iopUrl', 'https://reva1.pondersource.net/');"
 docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'revaSharedSecret', 'shared-secret-1');"
 docker exec -it maria1.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "select * from oc_appconfig where appid='sciencemesh';"
+docker exec -it nc1.docker /bin/bash -c "cd apps/sciencemesh && make build"
 ```
 
 On nc2.pondersource.net:
@@ -166,6 +167,7 @@ docker exec -it -u www-data nc2.docker /bin/bash /init.sh
 docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'iopUrl', 'https://reva2.pondersource.net/');"
 docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "insert into oc_appconfig (appid, configkey, configvalue) values ('sciencemesh', 'revaSharedSecret', 'shared-secret-2');"
 docker exec -it maria2.docker mysql -u root -peilohtho9oTahsuongeeTh7reedahPo1Ohwi3aek nextcloud -e "select * from oc_appconfig where appid='sciencemesh';"
+docker exec -it nc2.docker /bin/bash -c "cd apps/sciencemesh && make build"
 ```
 
 On reva1.pondersource.net:
@@ -182,7 +184,12 @@ cp /etc/letsencrypt/live/reva1.pondersource.net/fullchain.pem tls/server.crt
 cp /etc/letsencrypt/live/reva1.pondersource.net/privkey.pem tls/server.key
 touch tls/example.crt
 docker build -t revad .
-docker run --network=host -d --restart unless-stopped -e HOST=reva1.pondersource.net --name reva1.pondersource.net revad
+cd /root
+git clone https://github.com/cs3org/reva
+cd reva
+git checkout edge
+docker run -v /root/reva:/reva revad /bin/bash -c "cd /reva && export PATH=$PATH:/usr/local/go/bin && make deps && make build-revad"
+docker run --network=host -d --restart unless-stopped -e HOST=reva1.pondersource.net --name reva1.pondersource.net -v /root/reva:/reva revad
 ```
 
 On reva2.pondersource.net:
@@ -199,5 +206,10 @@ cp /etc/letsencrypt/live/reva2.pondersource.net/fullchain.pem tls/server.crt
 cp /etc/letsencrypt/live/reva2.pondersource.net/privkey.pem tls/server.key
 touch tls/example.crt
 docker build -t revad .
-docker run --network=host -d --restart unless-stopped -e HOST=reva2.pondersource.net --name reva2.pondersource.net revad
+cd /root
+git clone https://github.com/cs3org/reva
+cd reva
+git checkout edge
+docker run -v /root/reva:/reva revad /bin/bash -c "cd /reva && export PATH=$PATH:/usr/local/go/bin && make deps && make build-revad"
+docker run --network=host -d --restart unless-stopped -e HOST=reva2.pondersource.net --name reva2.pondersource.net -v /root/reva:/reva revad
 ```
