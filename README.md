@@ -52,7 +52,8 @@ For instance on Ubuntu:
 apt update
 apt install -y php git php-curl php-gd php-opcache php-xml php-gd \
   php-curl php-zip php-json libxml2 libxml2-dev php-xml php-mbstring \
-  build-essential curl php-sqlite3 php-xdebug php-mbstring php-zip
+  build-essential curl php-sqlite3 php-xdebug php-mbstring php-zip \
+  php-imagick imagemagick php-intl
 ```
 
 # Run tests
