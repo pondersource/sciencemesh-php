@@ -50,9 +50,9 @@ to connect.
 For instance on Ubuntu:
 ```sh
 apt update
-apt install -y php7.3 git php-curl php-gd php7.3-opcache php7.3-xml php7.3-gd \
-  php7.3-curl php7.3-zip php7.3-json libxml2 libxml2-dev php-xml php-mbstring \
-  build-essential curl php7.3-sqlite3 php-xdebug php7.3-mbstring php-zip
+apt install -y php git php-curl php-gd php-opcache php-xml php-gd \
+  php-curl php-zip php-json libxml2 libxml2-dev php-xml php-mbstring \
+  build-essential curl php-sqlite3 php-xdebug php-mbstring php-zip
 ```
 
 # Run tests
