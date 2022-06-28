@@ -10,13 +10,12 @@ Enable dynamic share providers in Nextcloud
 Apply the `dynamic-shareproviders`_ branch to your Nextcloud installation.
 This is necessary for Nextcloud to recognize shares of type the 'ScienceMesh'.
 
-Install Revad Edge
-~~~~~~~~~~~~~~~~~~
+Install Revad
+~~~~~~~~~~~~~
 See also https://github.com/cs3org/reva::
 
   git clone https://github.com/cs3org/reva
   cd reva
-  git checkout edge
   make deps
   make build
 
