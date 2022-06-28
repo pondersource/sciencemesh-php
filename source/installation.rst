@@ -24,6 +24,7 @@ Configure revad
 ~~~~~~~~~~~~~~~
 
 Something like `./mesh.toml`. This will probably require some experimentation. You can contact @michielbdejong in https://gitter.im/cs3org/REVA for help.
+See also https://github.com/cs3org/ocm-test-suite/tree/main/servers/revad
 
 Install the ScienceMesh app
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
