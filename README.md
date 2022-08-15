@@ -1,6 +1,8 @@
 # sciencemesh-nextcloud
 Connect your Nextcloud server to Sciencemesh
 
+See https://www.epj-conferences.org/articles/epjconf/pdf/2021/05/epjconf_chep2021_02041.pdf and https://sciencemesh.io/ for some more info on CS3MESH4EOSC / ScienceMesh / IOP / Reva, what it's trying to achieve, and why a bridge with Nextcloud (and backport to OC-10) is needed.
+
 This repo is mainly an overview of the sciencemesh-nextcloud project
 
 # Building the docs
