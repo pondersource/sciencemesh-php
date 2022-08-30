@@ -1,7 +1,12 @@
 Installation Guide
 ==================
 
-The ScienceMesh-Nextcloud connection helps sites who run Nextcloud as their enterprise file sync and share system to join the ScienceMesh.
+The ScienceMesh-Nextcloud connection helps sites who run Nextcloud or ownCloud 10 as their enterprise file sync and share system to join the ScienceMesh.
+
+For ownCloud 10 there is https://github.com/pondersource/oc-sciencemesh but the documentation is not complete yet.
+For now, you can refer to some links in this Gitter thread:
+https://gitter.im/sciencemesh/task-force-technical?at=630dc4aa9d3c186299d87893
+and ask your questions there.
 
 There are number of things you will need to do get this working for your site:
 
