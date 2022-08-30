@@ -3,16 +3,16 @@ Installation Guide
 
 The ScienceMesh-Nextcloud connection helps sites who run Nextcloud or ownCloud 10 as their enterprise file sync and share system to join the ScienceMesh.
 
-For ownCloud 10 there is https://github.com/pondersource/oc-sciencemesh but the documentation is not complete yet.
-For now, you can refer to some links in this Gitter thread:
-https://gitter.im/sciencemesh/task-force-technical?at=630dc4aa9d3c186299d87893
-and ask your questions there.
+For ownCloud 10 there is `oc-sciencemesh <https://github.com/pondersource/oc-sciencemesh>`__
+but the documentation is not complete yet.
 
+For now, you can refer to some links in `this Gitter thread <https://gitter.im/sciencemesh/task-force-technical?at=630dc4aa9d3c186299d87893>`__,
+and ask your questions there.
 There are number of things you will need to do get this working for your site:
 
 Enable dynamic share providers in Nextcloud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Apply the `dynamic-shareproviders`_ branch to your Nextcloud installation.
+Apply the `dynamic-shareproviders <https://github.com/pondersource/server/tree/dynamic-shareproviders>`__ branch to your Nextcloud installation.
 This is necessary for Nextcloud to recognize shares of type the 'ScienceMesh'.
 
 Install Revad
@@ -28,7 +28,7 @@ Configure revad
 ~~~~~~~~~~~~~~~
 
 Something like `./mesh.toml`. This will probably require some experimentation. You can contact @michielbdejong in https://gitter.im/cs3org/REVA for help.
-See also the `ocm-test-suite revad configs`_ for examples.
+See also the `ocm-test-suite revad configs <https://github.com/cs3org/ocm-test-suite/tree/main/servers/revad>`__ for examples.
 
 Install the ScienceMesh app
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,9 +42,4 @@ This will cause a few necessary database tables to be created.
 
 First use
 ~~~~~~~~~
-From there on, follow the `admin guide`_.
-
-__
-.. _`admin guide`: admin.html
-.. _`dynamic-shareproviders`: https://github.com/pondersource/server/tree/dynamic-shareproviders
-.. _`ocm-test-suite revad configs`: https://github.com/cs3org/ocm-test-suite/tree/main/servers/revad
+From there on, follow the `admin guide <admin.html>`_.

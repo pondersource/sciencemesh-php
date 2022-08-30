@@ -145,7 +145,4 @@ Similarly, the receiver can access the resource through their Nextcloud WebDAV i
 
 Registration flow API
 ~~~~~~~~~~~~~~~~~~~~~
-The registration for ScienceMesh is currently still quite a manual process. See `admin guide`_.
-
-__
-.. _`admin guide`: admin.html
+The registration for ScienceMesh is currently still quite a manual process. See `admin guide <admin.html>`__.

@@ -25,14 +25,7 @@ Indices and tables
 
 Guides
 ======
-* `installation guide`_
-* `admin guide`_ 
-* `user guide`_
-* `developer guide`_
-
-
-__
-.. _installation guide: installation.html
-.. _admin guide: admin.html
-.. _user guide: user.html
-.. _developer guide: developer.html
+* `installation guide <installation.html>`__
+* `admin guide <admin.html>`__ 
+* `user guide <user.html>`__
+* `developer guide <developer.html>`__
