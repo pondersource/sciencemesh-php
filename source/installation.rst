@@ -1,4 +1,4 @@
-Installation Guide
+NextCloud Installation Guide
 ==================
 
 The ScienceMesh-Nextcloud connection helps sites who run Nextcloud as their enterprise file sync and share system to join the ScienceMesh.

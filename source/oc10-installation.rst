@@ -1,4 +1,4 @@
-Installation Guide
+Owncloud Installation Guide
 ==================
 
 The ScienceMesh-OwnCloud connection helps sites who run OwnCloud10 as their enterprise file sync and share system to join the ScienceMesh.
