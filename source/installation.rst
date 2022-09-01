@@ -43,3 +43,4 @@ This will cause a few necessary database tables to be created.
 First use
 ~~~~~~~~~
 From there on, follow the `admin guide <admin.html>`_.
+ 
