@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the sciencemesh-nextcloud documentation!
+Welcome to the sciencemesh on NextCloud and OwnCloud documentation!
 ===================================================
 
 .. toctree::
@@ -25,7 +25,8 @@ Indices and tables
 
 Guides
 ======
-* `installation guide <installation.html>`__
+* `Nextcloud installation guide <installation.html>`__
+* `Nextcloud installation guide <oc10-installation.html>`
 * `admin guide <admin.html>`__ 
 * `user guide <user.html>`__
 * `developer guide <developer.html>`__
