@@ -11,6 +11,7 @@ Welcome to the sciencemesh on NextCloud and OwnCloud documentation!
    :caption: Contents:
 
    installation
+   oc10-installation
    admin
    user
    developer
@@ -25,8 +26,8 @@ Indices and tables
 
 Guides
 ======
-* `Nextcloud installation guide <installation.html>`__
-* `Nextcloud installation guide <oc10-installation.html>`
-* `admin guide <admin.html>`__ 
-* `user guide <user.html>`__
-* `developer guide <developer.html>`__
+* `NextCloud installation guide <installation.html>`__
+* `OwnCloud installation guide <oc10-installation.html>`
+* `Admin guide <admin.html>`__ 
+* `User guide <user.html>`__
+* `Developer guide <developer.html>`__
