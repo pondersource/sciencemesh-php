@@ -15,6 +15,7 @@ Welcome to the sciencemesh on NextCloud and OwnCloud documentation!
    admin
    user
    developer
+   reva-helm
 
 Indices and tables
 ==================
@@ -31,3 +32,4 @@ Guides
 * `Admin guide <admin.html>`__ 
 * `User guide <user.html>`__
 * `Developer guide <developer.html>`__
+* `Reva Installation using Helm Chart guide <reva-helm.html>`__
