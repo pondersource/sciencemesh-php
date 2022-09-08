@@ -35,8 +35,16 @@ Install the ScienceMesh app
 In your Nextcloud apps folder, run::
 
   git clone https://github.com/pondersource/nc-sciencemesh sciencemesh
+  cd sciencemesh
+  Make
 
-Enable the app in the Nextcloud admin dashboard.
+For Owncloud In your Owncloud apps folder, run::
+
+  git clone https://github.com/pondersource/oc-sciencemesh sciencemesh
+  cd sciencemesh
+  Make
+
+Enable the app in the Nextcloud/Owncloud admin dashboard.
 This will cause a few necessary database tables to be created.
 
 
