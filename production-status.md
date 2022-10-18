@@ -6,8 +6,8 @@
 
 ### CESNET ("CESNET a.l.e.")
 * OCM: https://sciencemesh.cesnet.cz/iop/ocm
-* EFSS GUI: ?
-* EFSS SW / VERSION: ? / ?
+* EFSS GUI: https://oc-mesh.du.cesnet.cz/index.php/apps/sciencemesh
+* EFSS SW / VERSION: ownCloud / 10.10.0
 * Contact(s) in task force: David Antoš / @david-antos, Milan Danecek / @milkydan
 
 ### CERN
