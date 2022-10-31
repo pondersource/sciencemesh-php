@@ -1,4 +1,29 @@
 {
-  "name": "pondersource/sciencemesh",
-  "description": "Code used by sciencemesh/nc-sciencemesh and sciencemesh/oc-sciencemesh"
+    "name": "pondersource/sciencemesh",
+    "type": "library",
+    "description": "Code used by sciencemesh/nc-sciencemesh and sciencemesh/oc-sciencemesh"
+    "homepage": "https://github.com/pondersource/sciencemesh-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michiel de Jong",
+            "email": "michiel@pondersource.com",
+            "homepage": "https://pondersource.com",
+            "role": "Developer"
+        },
+        {   "name": "Yvo Brevoort" },
+        {   "name": "Triantafullenia Doumani" },
+        {   "name": "Ismoil Shifoev" },
+        {   "name": "Benz Schenk" },
+        {   "name": "Navid Shokri" },
+        {   "name": "MohammadReza Vahedi" }
+    ],
+    "require": {
+        "php": ">=7.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Monolog": "src"
+        }
+    }
 }
