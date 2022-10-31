@@ -43,8 +43,8 @@
 ### AILLERON ("Ailleron/Softwaremind")
 * OCM: https://sciencemesh.softwaremind.com/iop/ocm
 * EFSS GUI: ?
-* EFSS SW / VERSION: ? / ?
-* Contact(s) in task force: @dagl
+* EFSS SW / VERSION: none in production
+* Contact(s) in task force: @dagl Dawid-Ailleron
 
 ### SWITCH
 * OCM: https://sciencemesh-test.switch.ch/iop/ocm
@@ -55,7 +55,7 @@
 ### DTU ("Danmarks Tekniske Universitet")
 * OCM: https://cs3mesh.sciencedata.dk/ocm
 * EFSS GUI: ?
-* EFSS SW / VERSION: ? / ?
+* EFSS SW / VERSION: ownCloud / 7 
 * Contact(s) in task force: ?
 
 ### PONDERSOURCE ("Ponder Source Foundation")
