@@ -1,7 +1,7 @@
 {
     "name": "pondersource/sciencemesh",
     "type": "library",
-    "description": "Code used by sciencemesh/nc-sciencemesh and sciencemesh/oc-sciencemesh"
+    "description": "Code used by sciencemesh/nc-sciencemesh and sciencemesh/oc-sciencemesh",
     "homepage": "https://github.com/pondersource/sciencemesh-php",
     "license": "MIT",
     "authors": [
