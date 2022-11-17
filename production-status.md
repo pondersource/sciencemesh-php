@@ -78,6 +78,5 @@
 
 ## PCSS / PSNC
 * Nextcloud (but Seafile in production)
-* Deployed but exact 
-* status is unknown
-* Testing planned for week of 14 November 2022
+* Deployed
+* Generating an invite token works, we tested this on 17 November 2022
