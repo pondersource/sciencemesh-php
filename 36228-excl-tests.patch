@@ -1,0 +1,464 @@
+From 2dc787f5b28e87717da2b11bdca8b4d6e75df77a Mon Sep 17 00:00:00 2001
+From: Michiel de Jong <michiel@unhosted.org>
+Date: Wed, 25 Jan 2023 13:02:46 +0000
+Subject: [PATCH] Add SHARE_TYPE_SCIENCEMESH
+
+Note that changes to tests were removed from this patch, see https://github.com/pondersource/sciencemesh-php/issues/157
+
+Signed-off-by: Michiel de Jong <michiel@unhosted.org>
+---
+ apps/admin_audit/lib/Actions/Sharing.php      | 25 +++++++
+ apps/dav/lib/Connector/Sabre/SharesPlugin.php |  1 +
+ apps/files/lib/Controller/ApiController.php   |  1 +
+ .../lib/Service/OwnershipTransferService.php  |  2 +-
+ .../Controller/DeletedShareAPIController.php  | 30 +++++++-
+ .../lib/Controller/ShareAPIController.php     | 71 +++++++++++++++++--
+ .../lib/Controller/ShareesAPIController.php   |  7 ++
+ apps/files_sharing/lib/MountProvider.php      |  1 +
+ .../src/components/SharingInput.vue           |  6 ++
+ apps/files_sharing/src/index.js               |  1 +
+ apps/files_sharing/src/share.js               |  2 +
+ lib/private/Share/Constants.php               |  5 ++
+ lib/private/Share20/Manager.php               |  1 +
+ lib/private/Share20/ProviderFactory.php       |  2 +
+ lib/public/Share/IShare.php                   |  5 ++
+ 15 files changed, [...]
+
+diff --git a/apps/admin_audit/lib/Actions/Sharing.php b/apps/admin_audit/lib/Actions/Sharing.php
+index 329ed740b53c..fd61d862e910 100644
+--- a/apps/admin_audit/lib/Actions/Sharing.php
++++ b/apps/admin_audit/lib/Actions/Sharing.php
+@@ -160,6 +160,19 @@ public function shared(array $params): void {
+ 					'id',
+ 				]
+ 			);
++		} elseif ($params['shareType'] === IShare::TYPE_SCIENCEMESH) {
++			$this->log(
++				'The %s "%s" with ID "%s" has been shared to the sciencemesh user "%s" with permissions "%s" (Share ID: %s)',
++				$params,
++				[
++					'itemType',
++					'path',
++					'itemSource',
++					'shareWith',
++					'permissions',
++					'id',
++				]
++			);
+ 		}
+ 	}
+ 
+@@ -276,6 +289,18 @@ public function unshare(array $params): void {
+ 					'id',
+ 				]
+ 			);
++		} elseif ($params['shareType'] === IShare::TYPE_SCIENCEMESH) {
++			$this->log(
++				'The %s "%s" with ID "%s" has been unshared from the sciencemesh user "%s" (Share ID: %s)',
++				$params,
++				[
++					'itemType',
++					'fileTarget',
++					'itemSource',
++					'shareWith',
++					'id',
++				]
++			);
+ 		}
+ 	}
+ 
+diff --git a/apps/dav/lib/Connector/Sabre/SharesPlugin.php b/apps/dav/lib/Connector/Sabre/SharesPlugin.php
+index 9fa6775c3b5c..3d52a44b6a65 100644
+--- a/apps/dav/lib/Connector/Sabre/SharesPlugin.php
++++ b/apps/dav/lib/Connector/Sabre/SharesPlugin.php
+@@ -110,6 +110,7 @@ private function getShare(Node $node): array {
+ 			IShare::TYPE_ROOM,
+ 			IShare::TYPE_CIRCLE,
+ 			IShare::TYPE_DECK,
++			IShare::TYPE_SCIENCEMESH,
+ 		];
+ 		foreach ($requestedShareTypes as $requestedShareType) {
+ 			$shares = $this->shareManager->getSharesBy(
+diff --git a/apps/files/lib/Controller/ApiController.php b/apps/files/lib/Controller/ApiController.php
+index 604cf9a3c647..9baf5e97892a 100644
+--- a/apps/files/lib/Controller/ApiController.php
++++ b/apps/files/lib/Controller/ApiController.php
+@@ -209,6 +209,7 @@ private function getShareTypesForNodes(array $nodes): array {
+ 			IShare::TYPE_EMAIL,
+ 			IShare::TYPE_ROOM,
+ 			IShare::TYPE_DECK,
++			IShare::TYPE_SCIENCEMESH,
+ 		];
+ 		$shareTypes = [];
+ 
+diff --git a/apps/files/lib/Service/OwnershipTransferService.php b/apps/files/lib/Service/OwnershipTransferService.php
+index 661a7e66e103..c744573ac992 100644
+--- a/apps/files/lib/Service/OwnershipTransferService.php
++++ b/apps/files/lib/Service/OwnershipTransferService.php
+@@ -286,7 +286,7 @@ private function collectUsersShares(string $sourceUid,
+ 		$shares = [];
+ 		$progress = new ProgressBar($output);
+ 
+-		foreach ([IShare::TYPE_GROUP, IShare::TYPE_USER, IShare::TYPE_LINK, IShare::TYPE_REMOTE, IShare::TYPE_ROOM, IShare::TYPE_EMAIL, IShare::TYPE_CIRCLE, IShare::TYPE_DECK] as $shareType) {
++		foreach ([IShare::TYPE_GROUP, IShare::TYPE_USER, IShare::TYPE_LINK, IShare::TYPE_REMOTE, IShare::TYPE_ROOM, IShare::TYPE_EMAIL, IShare::TYPE_CIRCLE, IShare::TYPE_DECK, IShare::TYPE_SCIENCEMESH] as $shareType) {
+ 			$offset = 0;
+ 			while (true) {
+ 				$sharePage = $this->shareManager->getSharesBy($sourceUid, $shareType, null, true, 50, $offset);
+diff --git a/apps/files_sharing/lib/Controller/DeletedShareAPIController.php b/apps/files_sharing/lib/Controller/DeletedShareAPIController.php
+index 1d625b35322a..19d1cbd0af60 100644
+--- a/apps/files_sharing/lib/Controller/DeletedShareAPIController.php
++++ b/apps/files_sharing/lib/Controller/DeletedShareAPIController.php
+@@ -159,6 +159,14 @@ private function formatShare(IShare $share): array {
+ 				$result = array_merge($result, $this->getDeckShareHelper()->formatShare($share));
+ 			} catch (QueryException $e) {
+ 			}
++		} elseif ($share->getShareType() === IShare::TYPE_SCIENCEMESH) {
++			$result['share_with'] = $share->getSharedWith();
++			$result['share_with_displayname'] = '';
++
++			try {
++				$result = array_merge($result, $this->getSciencemeshShareHelper()->formatShare($share));
++			} catch (QueryException $e) {
++			}
+ 		}
+ 
+ 		return $result;
+@@ -171,8 +179,9 @@ public function index(): DataResponse {
+ 		$groupShares = $this->shareManager->getDeletedSharedWith($this->userId, IShare::TYPE_GROUP, null, -1, 0);
+ 		$roomShares = $this->shareManager->getDeletedSharedWith($this->userId, IShare::TYPE_ROOM, null, -1, 0);
+ 		$deckShares = $this->shareManager->getDeletedSharedWith($this->userId, IShare::TYPE_DECK, null, -1, 0);
++		$sciencemeshShares = $this->shareManager->getDeletedSharedWith($this->userId, IShare::TYPE_SCIENCEMESH, null, -1, 0);
+ 
+-		$shares = array_merge($groupShares, $roomShares, $deckShares);
++		$shares = array_merge($groupShares, $roomShares, $deckShares, $sciencemeshShares);
+ 
+ 		$shares = array_map(function (IShare $share) {
+ 			return $this->formatShare($share);
+@@ -224,7 +233,7 @@ private function getRoomShareHelper() {
+ 	}
+ 
+ 	/**
+-	 * Returns the helper of ShareAPIHelper for deck shares.
++	 * Returns the helper of DeletedShareAPIHelper for deck shares.
+ 	 *
+ 	 * If the Deck application is not enabled or the helper is not available
+ 	 * a QueryException is thrown instead.
+@@ -239,4 +248,21 @@ private function getDeckShareHelper() {
+ 
+ 		return $this->serverContainer->get('\OCA\Deck\Sharing\ShareAPIHelper');
+ 	}
++
++	/**
++	 * Returns the helper of DeletedShareAPIHelper for sciencemesh shares.
++	 *
++	 * If the sciencemesh application is not enabled or the helper is not available
++	 * a QueryException is thrown instead.
++	 *
++	 * @return \OCA\Deck\Sharing\ShareAPIHelper
++	 * @throws QueryException
++	 */
++	private function getSciencemeshShareHelper() {
++		if (!$this->appManager->isEnabledForUser('sciencemesh')) {
++			throw new QueryException();
++		}
++
++		return $this->serverContainer->get('\OCA\ScienceMesh\Sharing\ShareAPIHelper');
++	}
+ }
+diff --git a/apps/files_sharing/lib/Controller/ShareAPIController.php b/apps/files_sharing/lib/Controller/ShareAPIController.php
+index ab318a81fc23..48146bc6599c 100644
+--- a/apps/files_sharing/lib/Controller/ShareAPIController.php
++++ b/apps/files_sharing/lib/Controller/ShareAPIController.php
+@@ -320,6 +320,14 @@ protected function formatShare(IShare $share, Node $recipientNode = null): array
+ 				$result = array_merge($result, $this->getDeckShareHelper()->formatShare($share));
+ 			} catch (QueryException $e) {
+ 			}
++		} elseif ($share->getShareType() === IShare::TYPE_SCIENCEMESH) {
++			$result['share_with'] = $share->getSharedWith();
++			$result['share_with_displayname'] = '';
++
++			try {
++				$result = array_merge($result, $this->getSciencemeshShareHelper()->formatShare($share));
++			} catch (QueryException $e) {
++			}
+ 		}
+ 
+ 
+@@ -692,6 +700,12 @@ public function createShare(
+ 			} catch (QueryException $e) {
+ 				throw new OCSForbiddenException($this->l->t('Sharing %s failed because the back end does not support room shares', [$node->getPath()]));
+ 			}
++		} elseif ($shareType === IShare::TYPE_SCIENCEMESH) {
++			try {
++				$this->getSciencemeshShareHelper()->createShare($share, $shareWith, $permissions, $expireDate);
++			} catch (QueryException $e) {
++				throw new OCSForbiddenException($this->l->t('Sharing %s failed because the back end does not support sciencemesh shares', [$node->getPath()]));
++			}
+ 		} else {
+ 			throw new OCSBadRequestException($this->l->t('Unknown share type'));
+ 		}
+@@ -730,8 +744,9 @@ private function getSharedWithMe($node, bool $includeTags): array {
+ 		$circleShares = $this->shareManager->getSharedWith($this->currentUser, IShare::TYPE_CIRCLE, $node, -1, 0);
+ 		$roomShares = $this->shareManager->getSharedWith($this->currentUser, IShare::TYPE_ROOM, $node, -1, 0);
+ 		$deckShares = $this->shareManager->getSharedWith($this->currentUser, IShare::TYPE_DECK, $node, -1, 0);
++		$sciencemeshShares = $this->shareManager->getSharedWith($this->currentUser, IShare::TYPE_SCIENCEMESH, $node, -1, 0);
+ 
+-		$shares = array_merge($userShares, $groupShares, $circleShares, $roomShares, $deckShares);
++		$shares = array_merge($userShares, $groupShares, $circleShares, $roomShares, $deckShares, $sciencemeshShares);
+ 
+ 		$filteredShares = array_filter($shares, function (IShare $share) {
+ 			return $share->getShareOwner() !== $this->currentUser;
+@@ -1414,6 +1429,14 @@ protected function canAccessShare(\OCP\Share\IShare $share, bool $checkGroups =
+ 			}
+ 		}
+ 
++		if ($share->getShareType() === IShare::TYPE_SCIENCEMESH) {
++			try {
++				return $this->getSciencemeshShareHelper()->canAccessShare($share, $this->currentUser);
++			} catch (QueryException $e) {
++				return false;
++			}
++		}
++
+ 		return false;
+ 	}
+ 
+@@ -1490,7 +1513,8 @@ protected function canDeleteShare(\OCP\Share\IShare $share): bool {
+ 	protected function canDeleteShareFromSelf(\OCP\Share\IShare $share): bool {
+ 		if ($share->getShareType() !== IShare::TYPE_GROUP &&
+ 			$share->getShareType() !== IShare::TYPE_ROOM &&
+-			$share->getShareType() !== IShare::TYPE_DECK
++			$share->getShareType() !== IShare::TYPE_DECK &&
++			$share->getShareType() !== IShare::TYPE_SCIENCEMESH
+ 		) {
+ 			return false;
+ 		}
+@@ -1527,6 +1551,14 @@ protected function canDeleteShareFromSelf(\OCP\Share\IShare $share): bool {
+ 			}
+ 		}
+ 
++		if ($share->getShareType() === IShare::TYPE_SCIENCEMESH) {
++			try {
++				return $this->getSciencemeshShareHelper()->canAccessShare($share, $this->currentUser);
++			} catch (QueryException $e) {
++				return false;
++			}
++		}
++
+ 		return false;
+ 	}
+ 
+@@ -1606,6 +1638,15 @@ private function getShareById(string $id): IShare {
+ 			// Do nothing, just try the other share type
+ 		}
+ 
++		try {
++			if ($this->shareManager->shareProviderExists(IShare::TYPE_SCIENCEMESH)) {
++				$share = $this->shareManager->getShareById('sciencemesh:' . $id, $this->currentUser);
++				return $share;
++			}
++		} catch (ShareNotFound $e) {
++			// Do nothing, just try the other share type
++		}
++
+ 		if (!$this->shareManager->outgoingServer2ServerSharesAllowed()) {
+ 			throw new ShareNotFound();
+ 		}
+@@ -1669,6 +1710,23 @@ private function getDeckShareHelper() {
+ 		return $this->serverContainer->get('\OCA\Deck\Sharing\ShareAPIHelper');
+ 	}
+ 
++	/**
++	 * Returns the helper of ShareAPIHelper for sciencemesh shares.
++	 *
++	 * If the sciencemesh application is not enabled or the helper is not available
++	 * a QueryException is thrown instead.
++	 *
++	 * @return \OCA\Deck\Sharing\ShareAPIHelper
++	 * @throws QueryException
++	 */
++	private function getSciencemeshShareHelper() {
++		if (!$this->appManager->isEnabledForUser('sciencemesh')) {
++			throw new QueryException();
++		}
++
++		return $this->serverContainer->get('\OCA\ScienceMesh\Sharing\ShareAPIHelper');
++	}
++
+ 	/**
+ 	 * @param string $viewer
+ 	 * @param Node $node
+@@ -1684,7 +1742,8 @@ private function getSharesFromNode(string $viewer, $node, bool $reShares): array
+ 			IShare::TYPE_EMAIL,
+ 			IShare::TYPE_CIRCLE,
+ 			IShare::TYPE_ROOM,
+-			IShare::TYPE_DECK
++			IShare::TYPE_DECK,
++			IShare::TYPE_SCIENCEMESH
+ 		];
+ 
+ 		// Should we assume that the (currentUser) viewer is the owner of the node !?
+@@ -1837,8 +1896,12 @@ private function getAllShares(?Node $path = null, bool $reshares = false) {
+ 		// TALK SHARES
+ 		$roomShares = $this->shareManager->getSharesBy($this->currentUser, IShare::TYPE_ROOM, $path, $reshares, -1, 0);
+ 
++		// DECK SHARES
+ 		$deckShares = $this->shareManager->getSharesBy($this->currentUser, IShare::TYPE_DECK, $path, $reshares, -1, 0);
+ 
++		// SCIENCEMESH SHARES
++		$sciencemeshShares = $this->shareManager->getSharesBy($this->currentUser, IShare::TYPE_SCIENCEMESH, $path, $reshares, -1, 0);
++
+ 		// FEDERATION
+ 		if ($this->shareManager->outgoingServer2ServerSharesAllowed()) {
+ 			$federatedShares = $this->shareManager->getSharesBy($this->currentUser, IShare::TYPE_REMOTE, $path, $reshares, -1, 0);
+@@ -1851,7 +1914,7 @@ private function getAllShares(?Node $path = null, bool $reshares = false) {
+ 			$federatedGroupShares = [];
+ 		}
+ 
+-		return array_merge($userShares, $groupShares, $linkShares, $mailShares, $circleShares, $roomShares, $deckShares, $federatedShares, $federatedGroupShares);
++		return array_merge($userShares, $groupShares, $linkShares, $mailShares, $circleShares, $roomShares, $deckShares, $sciencemeshShares, $federatedShares, $federatedGroupShares);
+ 	}
+ 
+ 
+diff --git a/apps/files_sharing/lib/Controller/ShareesAPIController.php b/apps/files_sharing/lib/Controller/ShareesAPIController.php
+index 00e63ccb7b01..c6b53c45a0d0 100644
+--- a/apps/files_sharing/lib/Controller/ShareesAPIController.php
++++ b/apps/files_sharing/lib/Controller/ShareesAPIController.php
+@@ -191,6 +191,10 @@ public function search(string $search = '', string $itemType = null, int $page =
+ 			if ($this->shareManager->shareProviderExists(IShare::TYPE_DECK)) {
+ 				$shareTypes[] = IShare::TYPE_DECK;
+ 			}
++
++			if ($this->shareManager->shareProviderExists(IShare::TYPE_SCIENCEMESH)) {
++				$shareTypes[] = IShare::TYPE_SCIENCEMESH;
++			}
+ 		} else {
+ 			if ($this->shareManager->allowGroupSharing()) {
+ 				$shareTypes[] = IShare::TYPE_GROUP;
+@@ -206,6 +210,9 @@ public function search(string $search = '', string $itemType = null, int $page =
+ 		if ($this->shareManager->shareProviderExists(IShare::TYPE_DECK)) {
+ 			$shareTypes[] = IShare::TYPE_DECK;
+ 		}
++		if ($this->shareManager->shareProviderExists(IShare::TYPE_SCIENCEMESH)) {
++			$shareTypes[] = IShare::TYPE_SCIENCEMESH;
++		}
+ 
+ 		if ($shareType !== null && is_array($shareType)) {
+ 			$shareTypes = array_intersect($shareTypes, $shareType);
+diff --git a/apps/files_sharing/lib/MountProvider.php b/apps/files_sharing/lib/MountProvider.php
+index a9705e94906c..2ad7ede8e40a 100644
+--- a/apps/files_sharing/lib/MountProvider.php
++++ b/apps/files_sharing/lib/MountProvider.php
+@@ -97,6 +97,7 @@ public function getMountsForUser(IUser $user, IStorageFactory $loader) {
+ 		$shares = array_merge($shares, $this->shareManager->getSharedWith($user->getUID(), IShare::TYPE_CIRCLE, null, -1));
+ 		$shares = array_merge($shares, $this->shareManager->getSharedWith($user->getUID(), IShare::TYPE_ROOM, null, -1));
+ 		$shares = array_merge($shares, $this->shareManager->getSharedWith($user->getUID(), IShare::TYPE_DECK, null, -1));
++		$shares = array_merge($shares, $this->shareManager->getSharedWith($user->getUID(), IShare::TYPE_SCIENCEMESH, null, -1));
+ 
+ 
+ 		// filter out excluded shares and group shares that includes self
+diff --git a/apps/files_sharing/src/components/SharingInput.vue b/apps/files_sharing/src/components/SharingInput.vue
+index 46c495d8279c..d8c18770efbf 100644
+--- a/apps/files_sharing/src/components/SharingInput.vue
++++ b/apps/files_sharing/src/components/SharingInput.vue
+@@ -187,6 +187,7 @@ export default {
+ 				this.SHARE_TYPES.SHARE_TYPE_ROOM,
+ 				this.SHARE_TYPES.SHARE_TYPE_GUEST,
+ 				this.SHARE_TYPES.SHARE_TYPE_DECK,
++				this.SHARE_TYPES.SHARE_TYPE_SCIENCEMESH,
+ 			]
+ 
+ 			if (OC.getCapabilities().files_sharing.public.enabled === true) {
+@@ -413,6 +414,11 @@ export default {
+ 					icon: 'icon-deck',
+ 					iconTitle: t('files_sharing', 'Deck board'),
+ 				}
++			case this.SHARE_TYPES.SHARE_TYPE_SCIENCEMESH:
++				return {
++					icon: 'icon-sciencemesh',
++					iconTitle: t('files_sharing', 'Science Mesh'),
++				}
+ 			default:
+ 				return {}
+ 			}
+diff --git a/apps/files_sharing/src/index.js b/apps/files_sharing/src/index.js
+index 9f80c79270e0..95ed017bbf90 100644
+--- a/apps/files_sharing/src/index.js
++++ b/apps/files_sharing/src/index.js
+@@ -34,5 +34,6 @@ Object.assign(OC, {
+ 		SHARE_TYPE_REMOTE_GROUP: 9,
+ 		SHARE_TYPE_ROOM: 10,
+ 		SHARE_TYPE_DECK: 12,
++		SHARE_TYPE_SCIENCEMESH: 15,
+ 	},
+ })
+diff --git a/apps/files_sharing/src/share.js b/apps/files_sharing/src/share.js
+index be003d51fa4c..63e33479691e 100644
+--- a/apps/files_sharing/src/share.js
++++ b/apps/files_sharing/src/share.js
+@@ -201,6 +201,8 @@ import { getCapabilities } from '@nextcloud/capabilities'
+ 								hasShares = true
+ 							} else if (shareType === ShareTypes.SHARE_TYPE_DECK) {
+ 								hasShares = true
++							} else if (shareType === ShareTypes.SHARE_TYPE_SCIENCEMESH) {
++								hasShares = true
+ 							}
+ 						})
+ 						OCA.Sharing.Util._updateFileActionIcon($tr, hasShares, hasLink)
+diff --git a/lib/private/Share/Constants.php b/lib/private/Share/Constants.php
+index 03c4c2ba828e..0ce079e58a7d 100644
+--- a/lib/private/Share/Constants.php
++++ b/lib/private/Share/Constants.php
+@@ -74,6 +74,11 @@ class Constants {
+ 	public const SHARE_TYPE_DECK = 12;
+ 	// const SHARE_TYPE_DECK_USER = 13; // Internal type used by DeckShareProvider
+ 
++	/**
++	 * @deprecated 21.0.0 - use IShare::TYPE_SCIENCEMESH instead
++	 */
++	public const SHARE_TYPE_SCIENCEMESH = 15;
++
+ 	public const FORMAT_NONE = -1;
+ 	public const FORMAT_STATUSES = -2;
+ 	public const FORMAT_SOURCES = -3;  // ToDo Check if it is still in use otherwise remove it
+diff --git a/lib/private/Share20/Manager.php b/lib/private/Share20/Manager.php
+index 7fd99545668b..f84ed1671ba7 100644
+--- a/lib/private/Share20/Manager.php
++++ b/lib/private/Share20/Manager.php
+@@ -244,6 +244,7 @@ protected function generalCreateChecks(IShare $share) {
+ 			}
+ 		} elseif ($share->getShareType() === IShare::TYPE_ROOM) {
+ 		} elseif ($share->getShareType() === IShare::TYPE_DECK) {
++		} elseif ($share->getShareType() === IShare::TYPE_SCIENCEMESH) {
+ 		} else {
+ 			// We cannot handle other types yet
+ 			throw new \InvalidArgumentException('unknown share type');
+diff --git a/lib/private/Share20/ProviderFactory.php b/lib/private/Share20/ProviderFactory.php
+index 16f9a17ee422..6abfb372a4d1 100644
+--- a/lib/private/Share20/ProviderFactory.php
++++ b/lib/private/Share20/ProviderFactory.php
+@@ -340,6 +340,8 @@ public function getProviderForType($shareType) {
+ 			$provider = $this->getRoomShareProvider();
+ 		} elseif ($shareType === IShare::TYPE_DECK) {
+ 			$provider = $this->getProvider('deck');
++		} elseif ($shareType === IShare::TYPE_SCIENCEMESH) {
++			$provider = $this->getProvider('sciencemesh');
+ 		}
+ 
+ 
+diff --git a/lib/public/Share/IShare.php b/lib/public/Share/IShare.php
+index f8f75be4c419..40548c6c73d2 100644
+--- a/lib/public/Share/IShare.php
++++ b/lib/public/Share/IShare.php
+@@ -117,6 +117,11 @@ interface IShare {
+ 	 */
+ 	public const TYPE_DECK_USER = 13;
+ 
++	/**
++	 * @since 26.0.0
++	 */
++	public const TYPE_SCIENCEMESH = 15;
++
+ 	/**
+ 	 * @since 18.0.0
+ 	 */
